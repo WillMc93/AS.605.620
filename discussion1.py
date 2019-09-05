@@ -5,6 +5,7 @@ def gen_masks(n):
 
 	# start w/ binary 1 (01)
 	# it's important that this starts with False becasue we really only need half the possiblities
+	# as the complement of the one's generated here will cover those we aren't generating
 	masks = [[False, True]]
 
 	# create binary numbers of length n
@@ -42,8 +43,9 @@ def gen_masks(n):
 	return prepd_masks
 
 def min_diff(array):
-	# get the array masks
-	# (we really only need the first half of the returns here)
+	# find an appropriate partion
+
+	# get the masks for partion 1
 	masks = gen_masks(len(array))
 
 	# get half the sum of the array
@@ -72,14 +74,15 @@ def min_diff(array):
 	return min_diff, part_mask
 
 def apply_mask(array, mask):
-	# return an list consisting of the 
+	# return an list consisting of the parts of array marked True by mask
 	return [array[i] for i in range(len(array)) if mask[i] == True]
 
 def complement(mask):
-	# return the complement of the mask (101 -> 010)
+	# return the complement of mask (101 -> 010)
 	return [not x for x in mask]
 		
 def report(array, diff, mask):
+	# print out the results nicely
 
 	part1 = apply_mask(array, mask)
 	part2 = apply_mask(array, complement(mask))
@@ -89,7 +92,7 @@ def report(array, diff, mask):
 	print(f"Partition 1: {part1}")
 	print(f"Partition 2: {part2}")
 
-
+# MAIN
 if __name__ == '__main__':
 	array = [1,2,3,4,5,6]
 	array2 = [1,2,3,6]
