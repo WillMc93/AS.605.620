@@ -31,7 +31,7 @@ def gen_masks(n):
 		masks += new_masks
 
 	# remove the all-true mask (last one)
-	masks = masks[:len(masks) - 1]
+	# masks = masks[:len(masks) - 1]
 				
 	# prepend the correct number of False's to the shorties
 	prepd_masks = []
