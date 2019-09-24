@@ -12,7 +12,8 @@ sys.path.append('./code/')
 
 # custom code
 from fileIO import read, write
-from multiplications import basic, strassen
+from basic import basic
+from strassen import strassen
 
 # MAIN
 if __name__ == '__main__':

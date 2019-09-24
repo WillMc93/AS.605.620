@@ -3,7 +3,10 @@ import re
 """
 Makes a embien matrix of all zeros.
 """
-def init_matrix(m, n):
+def init_matrix(m, n=None):
+	if n is None:
+		n = m
+
 	return [[0] * n for _ in range(m)]
 
 """
