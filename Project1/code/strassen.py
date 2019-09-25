@@ -56,8 +56,7 @@ IRL I'd probably use numpy to make this whole thing easier.
 def partition(matrix):
 	assert(is_square(matrix, len(matrix)))
 
-	size = int(len(matrix) / 2)
-	print(size)
+	size = int(len(matrix) / 2) # but why, Python?
 
 	partitions = []
 	for i in range(4):

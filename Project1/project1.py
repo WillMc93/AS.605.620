@@ -27,4 +27,7 @@ if __name__ == '__main__':
 	for size, matrixA, matrixB in read(infile):
 		productB = multiply(matrixA, matrixB)
 		productS = strassen(matrixA, matrixB)
+
+		assert(productB == productS)
+
 		write(matrixA, matrixB, productB, productS, {'basic': 0, 'strassen': 0}, outfile)
