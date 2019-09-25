@@ -1,8 +1,19 @@
-from matrix_tools import *
+"""
+Implements the Strassen Matrix Multiplication algorithm.
 
+@ authour William McElhenney
+@ version 1.0 09/25/2019
+"""
+
+
+from matrix_tools import *
 
 """
 Implements Strassen matrix multiplication
+
+@param matrixA: the first matrix to multiply
+@param matrixB: the second matrix to multiply
+@return the product of matrixA and matrixB
 """
 def strassen(matrixA, matrixB):
 	# an assumption
@@ -10,7 +21,7 @@ def strassen(matrixA, matrixB):
 
 	# safety checks
 	assert(len(matrixA) == len(matrixB))
-	assert (is_square(matrixA, size) and is_square(matrixB, size))
+	assert (is_square(matrixA) and is_square(matrixB))
 	
 	# do it
 	matrixC = init_matrix(size)
@@ -28,7 +39,6 @@ def strassen(matrixA, matrixB):
 
 
 	# Step 4: Calculate C11 through C22
-
 	# C11
 	partsC[0] = add_sub(prods[4], prods[3]) # P5 + P4
 	partsC[0] = add_sub(partsC[0], prods[1], True) # (P5 + P4) - P2
@@ -52,9 +62,13 @@ def strassen(matrixA, matrixB):
 Partitions matrix into quarters.
 Defined here instead of matrix_tools due to specialization.
 IRL I'd probably use numpy to make this whole thing easier.
+
+@param matrix: the matrix to partition
+@return list of the partitions
+
 """
 def partition(matrix):
-	assert(is_square(matrix, len(matrix)))
+	assert(is_square(matrix))
 
 	size = int(len(matrix) / 2) # but why, Python?
 
@@ -72,7 +86,10 @@ def partition(matrix):
 	return partitions
 
 """
-Returns a matrix consisting of the quarter partions
+Returns a matrix consisting of the quarter partions.
+
+@param parts: the partitions that we want to put back together
+@return the matrix of the combined parts
 """
 def departition(parts):
 	# IRL we should probably put a safety check here
@@ -94,6 +111,10 @@ def departition(parts):
 """
 Creates substitution matrices S1 through S10 from the partitions pA and pB.
 The book calls the submatrices, but I think substituition is more fitting.
+
+@param pA: partitions of matrixA
+@param pB: partitions of matrixB
+@return subs: list contains the substitution matrices S1 - S10
 """
 def get_subs(pA, pB):
 
@@ -116,6 +137,11 @@ def get_subs(pA, pB):
 
 """
 Creates the matrix products P1 through P7
+
+@param pA: partitions of matrixA
+@param pB: partitions of matrixB
+@param subs: list containing the substitution matrices
+@return prods: the specified products for Strassen
 """
 def get_prods(pA, pB, subs):
 

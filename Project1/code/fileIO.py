@@ -1,11 +1,21 @@
-import re # regular expressions for formatting the read-in data
+"""
+Module for reading and writing to files correctly.
+
+@author William McElhenney
+@version 1.0 9/25/2019
+"""
+
+import re # regular expressions
 
 # custom code
 from matrix_tools import *
 
 """
-Generator function that reads in the data and
-converts in to a usable form (size, matrix A, matrix B)
+Generator function that reads in the data and converts into a
+usable form.
+
+@parma path: string for the path to the input file
+@yield size, matrixA, matrixB: a tuple containing the size read and the matrices
 """
 def read(path):
 	# get that data
@@ -46,13 +56,13 @@ def read(path):
 
 		# Make sure that the matrices are square
 		try:
-			is_square(matrixA, size)
+			is_square(matrixA)
 		except IndexError:
 			print(f"MatrixA: {matrixA}")
 			print("The data for matrixA is improperly formatted!")
 			return
 		try:
-			is_square(matrixB, size)
+			is_square(matrixB)
 		except IndexError:
 			print(f"MatrixB: {matrixB}")
 			print("The data for matrixB is improperly formatted!")
@@ -70,7 +80,12 @@ def read(path):
 	return
 
 """
-Helper function for writing matrices to output file
+Helper function for writing matrices to output file.
+
+@param matrix: the matrix to be written
+@param file: the file opened by write()
+@param delimit: allows the end of each line to be set to a given string
+	for readability
 """
 def write_matrix(matrix, file, delimit='\n'):
 	for row in matrix:
@@ -81,7 +96,14 @@ def write_matrix(matrix, file, delimit='\n'):
 	file.write('\n')
 
 """
-Outputs the results
+Outputs the results to the output file.
+
+@param matrixA: the first matrix read-in
+@param matrixB: the second matrix read-in
+@param productB: the basic multiplication product of A and B
+@param productS: the strassen multiplication product of A and B
+@param times: dictionary of the running times
+@param path: string of the path to the output file
 """
 def write(matrixA, matrixB, productB, productS, times, path):
 	with open(path, 'a+') as file:
