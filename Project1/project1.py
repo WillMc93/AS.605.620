@@ -12,7 +12,7 @@ sys.path.append('./code/')
 
 # custom code
 from fileIO import read, write
-from basic import basic
+from matrix_tools import multiply
 from strassen import strassen
 
 # MAIN
@@ -25,5 +25,6 @@ if __name__ == '__main__':
 		file.write('')
 
 	for size, matrixA, matrixB in read(infile):
-		productB = basic(size, matrixA, matrixB)
-		write(matrixA, matrixB, productB, None, {'basic': 0, 'strassen': 0}, outfile)
+		productB = multiply(matrixA, matrixB)
+		productS = strassen(matrixA, matrixB)
+		write(matrixA, matrixB, productB, productS, {'basic': 0, 'strassen': 0}, outfile)

@@ -96,7 +96,7 @@ def write(matrixA, matrixB, productB, productS, times, path):
 		write_matrix(productB, file, delimit='\n\t\t')
 
 		file.write("\tStrassen: \n\t\t")
-		file.write("?\n")
+		write_matrix(productS, file, delimit='\n\t\t')
 
 		file.write("\nSTATS:")
 		file.write(f"\n\tAverage completion time for basic multiplication: {times['basic']}")
