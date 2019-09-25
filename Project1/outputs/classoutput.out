@@ -15,9 +15,6 @@ Outputs:
 		26 22 
 		
 
-STATS:
-	Average completion time for basic multiplication: 0
-	Average completion time for strassen multiplication: 0
 ------------------------------------------------------------------------------
 
 Inputs:
@@ -45,9 +42,6 @@ Outputs:
 		-6 9 -8 3 
 		
 
-STATS:
-	Average completion time for basic multiplication: 0
-	Average completion time for strassen multiplication: 0
 ------------------------------------------------------------------------------
 
 Inputs:
@@ -91,8 +85,5 @@ Outputs:
 		18 -5 -4 -11 -3 1 3 3 
 		
 
-STATS:
-	Average completion time for basic multiplication: 0
-	Average completion time for strassen multiplication: 0
 ------------------------------------------------------------------------------
 

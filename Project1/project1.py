@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+#!/usr/bin/env python3
+
 """
 605.420 Project 1 - Matrix Multiplication
 
@@ -7,7 +10,7 @@
 import sys
 
 # custom code
-sys.path.append('./code/')
+sys.path.append('./code/') # make sure we can find the following
 from fileIO import read, write
 from matrix_tools import multiply
 from strassen import strassen
@@ -28,11 +31,27 @@ if __name__ == '__main__':
 		file.write('')
 
 	# Do the things
-	for size, matrixA, matrixB in read(infile):
-		productB = multiply(matrixA, matrixB)
-		productS = strassen(matrixA, matrixB)
+	try:
+		for size, matrixA, matrixB in read(infile):
+			productB = multiply(matrixA, matrixB)
+			print("Successfully multiplied!")
+			productS = strassen(matrixA, matrixB)
+			print("Successfully (Strassen) multiplied!")
 
-		assert(productB == productS)
+			assert(productB == productS)
 
-		write(matrixA, matrixB, productB, productS, \
-			{'basic': 0, 'strassen': 0}, outfile)
+
+			# generate timings
+
+
+			write(matrixA, matrixB, productB, productS, outfile)
+	except FileNotFoundError as e:
+		print(str(e))
+	except Exception as e:
+		print("Something went wrong. The input data is likely has a " + \
+			"formatting issue.")
+		print("Make sure the input only consists of " + \
+			"numbers, and that the size matches the matrix.")
+		print('Caught Exception:\n\t\t' + str(e) + "\n\n")
+		with open(outfile, 'a+') as file:
+			file.write(str(e))

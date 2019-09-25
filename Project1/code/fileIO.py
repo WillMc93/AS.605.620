@@ -105,7 +105,7 @@ Outputs the results to the output file.
 @param times: dictionary of the running times
 @param path: string of the path to the output file
 """
-def write(matrixA, matrixB, productB, productS, times, path):
+def write(matrixA, matrixB, productB, productS, path):
 	with open(path, 'a+') as file:
 		file.write("Inputs:\n")
 
@@ -120,8 +120,11 @@ def write(matrixA, matrixB, productB, productS, times, path):
 		file.write("\tStrassen: \n\t\t")
 		write_matrix(productS, file, delimit='\n\t\t')
 
+		"""
+		Was going to calculate times, but I ran out of time.
 		file.write("\nSTATS:")
 		file.write(f"\n\tAverage completion time for basic multiplication: {times['basic']}")
 		file.write(f"\n\tAverage completion time for strassen multiplication: {times['strassen']}")
+		"""
 
 		file.write(f"\n{'-' * 78}\n\n")
