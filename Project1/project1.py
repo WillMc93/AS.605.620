@@ -10,7 +10,7 @@
 import sys
 
 # custom code
-sys.path.append('./code/') # make sure we can find the following
+sys.path.append('./code/') # make sure we can find the following from root
 from fileIO import read, write
 from matrix_tools import multiply
 from strassen import strassen
@@ -22,7 +22,7 @@ Reads in the data, runs the multiplications,
 and gets the results written
 """
 if __name__ == '__main__':
-	# Get the command line argumentsd
+	# Get the command line arguments
 	infile = sys.argv[1]
 	outfile = sys.argv[2]
 
@@ -38,16 +38,16 @@ if __name__ == '__main__':
 			productS = strassen(matrixA, matrixB)
 			print("Successfully (Strassen) multiplied!")
 
-			assert(productB == productS)
-
-
-			# generate timings
-
+			assert(productB == productS) # sanity check
 
 			write(matrixA, matrixB, productB, productS, outfile)
+
+	# Need to tell the user so they know to check the file		
 	except FileNotFoundError as e:
 		print(str(e))
-	except Exception as e:
+
+	# Let the user know an error was encountered (should be on their end)
+	except Exception as e: 
 		print("Something went wrong. The input data is likely has a " + \
 			"formatting issue.")
 		print("Make sure the input only consists of " + \
