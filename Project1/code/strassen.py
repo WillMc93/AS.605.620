@@ -8,6 +8,11 @@ Implements the Strassen Matrix Multiplication algorithm.
 
 from matrix_tools import *
 
+counter = 0
+
+def reset():
+	counter = 0
+	
 """
 Implements Strassen matrix multiplication
 
@@ -25,6 +30,7 @@ def strassen(matrixA, matrixB):
 
 	# BASE CASE
 	if size == 1:
+		count += 1
 		return multiply(matrixA, matrixB)
 
 	
