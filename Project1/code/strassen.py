@@ -12,7 +12,7 @@ counter = 0
 
 def reset():
 	counter = 0
-	
+
 """
 Implements Strassen matrix multiplication
 
@@ -30,7 +30,7 @@ def strassen(matrixA, matrixB):
 
 	# BASE CASE
 	if size == 1:
-		count += 1
+		counter += 1
 		return multiply(matrixA, matrixB)
 
 	

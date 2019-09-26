@@ -13,7 +13,7 @@ import sys
 sys.path.append('./code/') # make sure we can find the following from root
 from fileIO import read, write
 from matrix_tools import multiply
-from strassen import strassen
+from strassen import strassen, reset
 
 """
 MAIN
@@ -35,8 +35,10 @@ if __name__ == '__main__':
 		for size, matrixA, matrixB in read(infile):
 			productB = multiply(matrixA, matrixB)
 			print("Successfully multiplied!")
+
+			reset()
 			productS = strassen(matrixA, matrixB)
-			print("Successfully (Strassen) multiplied!")
+			print(f"Successfully (Strassen) multiplied! {strassen.counter}")
 
 			assert(productB == productS) # sanity check
 
