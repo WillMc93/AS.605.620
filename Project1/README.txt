@@ -32,7 +32,7 @@ The follwing are TEST inputs:
 	lettermat.dat - non-numeric in matrix
 	toosmall.dat - size is too small
 	toobig.dat - size is too big
-	badmat.dat - just stupid
+	badmat.dat - just bad
 
 -----------------------------------------------------------------------------
 
