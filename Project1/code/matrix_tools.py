@@ -76,9 +76,9 @@ def multiply(matrixA, matrixB):
 	for m in range(size):
 		# iterate through columns of matrixB
 		for n in range(size):
-			# iterate through rows of matrixB
-			for n2 in range(size):
-				outp[m][n] += matrixA[m][n2] * matrixB[n2][n]
+			# iterate through the columns of A and the rows of B
+			for o in range(size):
+				outp[m][n] += matrixA[m][o] * matrixB[n2][o]
 
 	return outp
 

@@ -147,12 +147,12 @@ def get_prods(pA, pB, subs):
 
 	prods = []
 
-	prods.append(multiply(pA[0], subs[0])) # P1 = A11 * S1
-	prods.append(multiply(subs[1], pB[3])) # P2 = S2 * B22
-	prods.append(multiply(subs[2], pB[0])) # P3 = S3 * B11
-	prods.append(multiply(pA[3], subs[3])) # P4 = A22 * S4
-	prods.append(multiply(subs[4], subs[5])) # P5 = S5 * S6
-	prods.append(multiply(subs[6], subs[7])) # P6 = S7 * S8
-	prods.append(multiply(subs[8], subs[9])) # P7 = S9 * S10
+	prods.append(strassen(pA[0], subs[0])) # P1 = A11 * S1
+	prods.append(strassen(subs[1], pB[3])) # P2 = S2 * B22
+	prods.append(strassen(subs[2], pB[0])) # P3 = S3 * B11
+	prods.append(strassen(pA[3], subs[3])) # P4 = A22 * S4
+	prods.append(strassen(subs[4], subs[5])) # P5 = S5 * S6
+	prods.append(strassen(subs[6], subs[7])) # P6 = S7 * S8
+	prods.append(strassen(subs[8], subs[9])) # P7 = S9 * S10
 
 	return prods
