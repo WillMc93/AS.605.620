@@ -22,8 +22,13 @@ def strassen(matrixA, matrixB):
 	# safety checks
 	assert(len(matrixA) == len(matrixB))
 	assert (is_square(matrixA) and is_square(matrixB))
+
+	# BASE CASE
+	if size == 1:
+		return multiply(matrixA, matrixB)
+
 	
-	# do it
+	# GENERAL CASE
 	matrixC = init_matrix(size)
 
 	# Step 1: Partition the matrices
