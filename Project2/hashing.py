@@ -2,32 +2,48 @@ class hash_table:
 	"""
 	Constructor for hash table
 	"""
-	def __init__(self, bucket_size, mod, collision='quadratic', size=120):
+	def __init__(self, size=120, mod=120, bucket_size=3, collision='quadratic', \
+						c=[0,1]):
 
 		collisions = {'linear': self.linear, 'quadratic': self.quadratic, \
-				'chaining': self.chaining}
+							'chaining': self.chaining}
 
 		# check that parameters are okay
 		assert(size > 0)
 		assert(bucket_size > 0)
 		assert(mod > 1)
-		assert(collision in collisions.keys())
 
-		# store the parameters for this table
-		self.bucket_size = bucket_size
-		self.mod = mod
-		self.collision = collisions[collision]
-		self.size = size
+		# store the parameters for this table iff acceptable, default if not
+		self.size = size if size > 0 else 120
+		self.bucket_size = bucket_size if bucket_size > 0 else 3
+		self.mod = mod if mod > 1 else 
+
+
+		# Initialize collision and c
+		self.collision = None
+		self.c = list()
+
+		# Error check and set collision and c
+		if collision in collisions.keys():
+			self.collision = collisions[collision]
+			self.c = c
+		else:
+			print(f"The specified collision method {collision} is not valid. ", \
+					"Defaulting to Quadratic with c=[0,1]")
+			self.collision=self.quadratic
+			self.c = [0,1]
 		
 		
-		# initialize the table
+		# Initialize the table
+		self.table = list()
 		# if bucket size > 1 table consists of empty lists
 		if self.bucket_size > 1:
-			return [list()] * self.size
+			self.table = [list() for _ in range(self.size)]
 
 		# otherwise table consists of Nones (emptys)
 		else:
-			return [None] * self.size
+			self.table = [None] * self.size
+
 
 	def linear(self, hash_key):
 		# keep track of probes
@@ -48,7 +64,7 @@ class hash_table:
 		new_hash = hash_key
 		while count < self.size:
 			# let c1 = 0 and c2 = 1
-			new_hash = (new_hash + count ** 2) % self.mod
+			new_hash = (new_hash + c[0] * count**2 + c[1] * count) % self.mod
 			yield new_hash
 
 		return
@@ -90,6 +106,7 @@ class hash_table:
 
 			else:
 				for p in self.collision(hash_key):
+
 
 
 
