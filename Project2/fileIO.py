@@ -25,8 +25,8 @@ def write_output(table, path):
 
 		file.write("-" * 78)
 
-		file.write("Statistics: \n")
-		file.write(f"Collisions: {table.collisions} \n")
-		file.write(f"Unplacable: {table.not_placed} \n")
+		file.write("Statistics -- \n")
+		file.write(f"\tCollisions: {table.collisions} \n")
+		file.write(f"\tUnplacable: {table.not_placed} \n")
 
 
