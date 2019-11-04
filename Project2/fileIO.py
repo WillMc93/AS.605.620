@@ -18,7 +18,7 @@ def read_input(path):
 				yield int(outp)
 	return
 
-def write_output(table, path):
+def write_outp(table, path):
 
 	with open(path, 'w') as file:
 		file.write(table.to_string())
@@ -26,7 +26,7 @@ def write_output(table, path):
 		file.write("-" * 78)
 
 		file.write("Statistics -- \n")
-		file.write(f"\tCollisions: {table.collisions} \n")
+		"""file.write(f"\tCollisions: {table.collisions} \n")
 		file.write(f"\tUnplacable: {table.not_placed} \n")
-
+		"""
 

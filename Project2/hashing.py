@@ -10,7 +10,7 @@ class hash_table:
 							'chaining': self.chaining}
 
 		# dictionary of accptable hash types, mapped yadda-yadda
-		hashes = {'class': self.class_hash, 'student': self.my_hash}
+		hashes = {'class': self.hash, 'student': self.hash}
 
 		# Store the parameters for this table iff acceptable, default otherwise
 		self.size = size if size > 0 else 120
@@ -58,8 +58,8 @@ class hash_table:
 			self.table = [None] * self.size
 
 		# Set the hash function (class vs mine)
-		if hash_type in hashes.keys():
-			self.hash = hashes[hash_type]
+		if hash in hashes.keys():
+			self.hash = hashes[hash]
 		else:
 			print(f"The hash-type, {hash_type}, is not valid. Defaulting to ", \
 					"the in-class hash.")
@@ -88,7 +88,8 @@ class hash_table:
 		new_hash = hash_key
 		while count < self.size:
 			# let c1 = 0 and c2 = 1
-			new_hash = (new_hash + c[0] * count + c[1] * count**2) % self.mod
+			c1, c2 = self.c
+			new_hash = (new_hash + c1 * count + c2 * count**2) % self.mod
 			count += 1
 
 			yield new_hash
@@ -102,7 +103,7 @@ class hash_table:
 		
 		return
 
-	def class_hash(self, elem):
+	def hash(self, elem):
 		hash_key = elem % self.mod
 
 		# split function based on bucket size
@@ -139,7 +140,7 @@ class hash_table:
 
 	def to_string(self):
 		# string we'll output later
-		outp = str
+		outp = str()
 
 		# counter for keeping the number of entries per line
 		prints = 0
