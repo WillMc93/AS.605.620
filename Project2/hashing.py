@@ -17,6 +17,9 @@ class hash_table:
 		self.bucket_size = bucket_size if bucket_size > 0 else 3
 		self.mod = mod if mod > 1 else 120
 
+		self.collisions_count = 0
+		self.unplaced = []
+
 
 		# Tell user if we defaulted
 		if size <= 0:
@@ -76,6 +79,7 @@ class hash_table:
 		# keep yielding hashes until we find a usable bucket
 		new_hash = hash_key
 		while count < self.size:
+			self.collisions_count += 1
 			new_hash = new_hash + 1 if new_hash + 1 < self.size else 0
 			count += 1
 
@@ -90,20 +94,24 @@ class hash_table:
 		# keep yielding hashes until we find a useable bucket
 		new_hash = hash_key
 		while count < self.size:
-			# let c1 = 0 and c2 = 1
+			self.collisions_count += 1
 			c1, c2 = self.c
 			new_hash = (new_hash + c1 * count + c2 * count**2) % self.mod
 			count += 1
 
 			yield new_hash
 
+		if count == self.size:
+			yield None
+
 		return
 
 	def chaining(self, hash_key):
-		# turn non-list buckets into lists as necessary
-		if type(self.table[hash_key]) is not list:
-			self.table[hash_key] = list()
-			yield hash_key
+		# dummy function.
+		# just update the collision counter
+
+		if len(self.table[hash_key]) > 0:
+			self.collisions_count += 1
 		
 		return
 
@@ -119,6 +127,10 @@ class hash_table:
 				else:
 					# probe for an empty bucket
 					for p in self.collision(hash_key):
+						if p is None:
+							self.unable.append(elem)
+							break
+
 						if self.table[p] is None:
 							self.table[p] = elem
 							break
@@ -137,6 +149,8 @@ class hash_table:
 			else:
 				for p in self.collision(hash_key):
 					if len(self.table[p]) < self.bucket_size:
+						if p is None:
+							self.unable.append()
 						self.table[p].append(elem)
 						break
 
