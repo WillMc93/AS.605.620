@@ -4,7 +4,7 @@ import sys
 import re
 
 DEFAULTS = {'input_path': '', 'output_path': './outputs/default_output.txt', \
-						'hash_method': 'class', 'mod': 120, 'bucket_size': 3, \
+						'hash_func': 'class', 'mod': 120, 'bucket_size': 3, \
 						'collision': 'quadratic', 'c': [0,1]}
 
 INT_PARAMS = ['mod', 'bucket_size']
@@ -19,16 +19,16 @@ str_pat = r'[A-Za-z0-9/\\._]+'
 parameters = DEFAULTS.copy()
 
 def help():
-	print("Usage: main.py [input_path] [output_path] [hash_method] [mod]", \
+	print("Usage: main.py [input_path] [output_path] [hash_func] [mod]", \
 				"[bucket_size] [collision] [c]")
 	print("Arguments may be entered positionally as above, ", \
 			"or with prefixes (e.g. --input_path=[path])")
 	print("If using a named parameter all must be named ", \
 			"(except for input and output which are checked for).")
-	print("Default hash_method . . . c = 'class', '120', '3', ", \
-		"'quadratic', [0,1]")
+	print("Defaults: 'class', '120', '3', ", \
+			"'quadratic', [0,1]")
 	print("\nOptions: ")
-	print("\thash_method: choose between 'class' or 'student'")
+	print("\thash_func: choose between 'class' or 'student'")
 	print("\tmod: mod value for class hash")
 	print("\tbucket_size: size of buckets")
 	print("\tcollision: 'linear' 'quadratic' or 'chaining'")
@@ -122,7 +122,7 @@ def set_params():
 		if len(sys.argv) > 2:
 			parameters['output_path'] = sys.argv[2]
 		if len(sys.argv) > 3:
-			parameters['hash_method'] = sys.argv[3]
+			parameters['hash_func'] = sys.argv[3]
 		if len(sys.argv) > 4:
 			parameters['mod'] = int(sys.argv[4])
 		if len(sys.argv) > 5:
@@ -173,14 +173,14 @@ if __name__ == '__main__':
 	# Unpack parameters
 	input_path = parameters['input_path']
 	output_path = parameters['output_path']
-	hash_method = parameters['hash_method']
+	hash_func = parameters['hash_func']
 	mod = parameters['mod']
 	bucket_size = parameters['bucket_size']
 	collision = parameters['collision']
 	c = parameters['c']
 
 	# Initialize the hash table
-	hash_table = hashing.hash_table(hash_func=hash_method, mod=mod,
+	hash_table = hashing.hash_table(hash_func=hash_func, mod=mod,
 									bucket_size=bucket_size, collision=collision, 
 									c=c)
 

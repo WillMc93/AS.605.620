@@ -16,9 +16,7 @@ class hash_table:
 		self.size = size if size > 0 else 120
 		self.bucket_size = bucket_size if bucket_size > 0 else 3
 		self.mod = mod if mod > 1 else 120
-
 		self.prim_coll_count = 0
-		self.sec_coll_count = 0 # only used for chaining
 		self.unplaced = []
 
 
