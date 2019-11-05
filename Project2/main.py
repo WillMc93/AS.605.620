@@ -118,6 +118,7 @@ def set_params():
 	# If they are positional set our options
 	if positional:
 		parameters['input_path'] = sys.argv[1]
+		
 		if len(sys.argv) > 2:
 			parameters['output_path'] = sys.argv[2]
 		if len(sys.argv) > 3:
@@ -129,7 +130,7 @@ def set_params():
 		if len(sys.argv) > 6:
 			parameters['collision'] = sys.argv[6]
 		if len(sys.argv) > 7:
-			c = re.fullmatch(sys.argv[7])
+			c = re.fullmatch(c_pat, sys.argv[7])
 
 			if c:
 				c1 = c.group('c1')
@@ -139,27 +140,29 @@ def set_params():
 				c2 = float(c2)
 
 				parameters['c'] = [c1,c2]
+		return
+		
+	else: 
+		# Check for = mismatch on input (allowed)
+		if '=' not in sys.argv[1]:
+				parameters['input_path'] = sys.argv[1]
+		# Check for = mismatch on output (allowed)
+		if len(sys.argv) > 2 and '=' not in sys.argv[2]:
+				parameters['output_path'] = sys.argv[2]
 
-	# Check for = mismatch on input (allowed)
-	if '=' not in sys.argv[1]:
-			parameters['input_path'] = sys.argv[1]
-	# Check for = mismatch on output (allowed)
-	if len(sys.argv) > 2 and '=' not in sys.argv[2]:
-			parameters['output_path'] = sys.argv[2]
+		# Set the named parameters. = mismatch not allowed from here on.
+		for elem in sys.argv[1:]:
+			# Parse the input
+			option = parse(elem)
 
-	# Set the named parameters. = mismatch not allowed from here on.
-	for elem in sys.argv[1:]:
-		# Parse the input
-		option = parse(elem)
+			# Set the param
+			if option:
+				parameters[option[0]] = option[1]
 
-		# Set the param
-		if option:
-			parameters[option[0]] = option[1]
-
-		else:
-			# If the option didn't match the user has been notified, and we 
-			# just default.
-			continue
+			else:
+				# If the option didn't match the user has been notified, and we 
+				# just default.
+				continue
 
 	return
 

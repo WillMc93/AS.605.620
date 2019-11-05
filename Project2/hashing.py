@@ -99,7 +99,9 @@ class hash_table:
 	def chaining(self, hash_key):
 		# turn non-list buckets into lists as necessary
 		if type(self.table[hash_key]) is not list:
-			self.table[hash_key] = list(self.table[hash_key])
+			temp = self.table[hash_key]
+			self.table[hash_key] = [temp]
+			yield hash_key
 		
 		return
 
@@ -114,7 +116,7 @@ class hash_table:
 
 				else:
 					# probe for an empty bucket
-					for p in collision(hash_key):
+					for p in self.collision(hash_key):
 						if self.table[p] is None:
 							self.table[p] = elem
 							break
@@ -149,11 +151,14 @@ class hash_table:
 		_nothing = "-" * 5
 
 		# didn't want to have type this over and over
-		def _next_line():
+		# this isn't the best solution, probably
+		def _next_line(prints, outp):
 			prints += 1
 			if prints > 4:
 				outp += "\n"
 				prints = 0
+
+			return prints, outp
 
 		# Split on bucket size and chaining strat
 		if self.bucket_size == 1 and self.collision is not self.chaining:
@@ -165,7 +170,7 @@ class hash_table:
 
 				outp += " "
 
-				_next_line()
+				prints, outp = _next_line(prints, outp)
 
 		# if we did use chaining
 		elif self.collision is self.chaining:
@@ -173,13 +178,13 @@ class hash_table:
 				if len(bucket) == 0:
 					outp += _nothing + " "
 					
-					_next_line()
+					prints, outp = _next_line(prints, outp)
 
 				else:
 					for elem in bucket:
 						outp += str(elem) + " "
 
-						_next_line()
+						prints, outp = _next_line(prints, outp)
 
 		# if we didn't use chaining and our bucket size > 1
 		elif self.bucket_size > 1:
