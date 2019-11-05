@@ -3,15 +3,15 @@ import fileIO
 import sys
 import re
 
-DEFAULTS = {'input_path': '', 'output_path': './outputs/default_output.txt', \
+DEFAULTS = {'input': '', 'output': './outputs/default_output.txt', \
 						'hash_func': 'class', 'mod': 120, 'bucket_size': 3, \
 						'collision': 'quadratic', 'c': [0,1]}
 
 INT_PARAMS = ['mod', 'bucket_size']
 
 # Regex patterns
-param_pat = r'^--(?P<parameter>[A-Za-z_]+)=(?P<value>.+)$'
-c_pat = r'^\[(?P<c1>[0-9]+.?[0-9]*),[\s]*(?P<c2>[0-9]+.?[0-9]*)\]&'
+param_pat = r'^(?P<parameter>[A-Za-z_]+)=(?P<value>.+)$'
+c_pat = r'\[(?P<c1>[0-9]+.{0,1}[0-9]*),[\s]*(?P<c2>[0-9]+.{0,1}[0-9]*)\]'
 int_pat = r'[0-9]+'
 str_pat = r'[A-Za-z0-9/\\._]+'
 
@@ -115,12 +115,16 @@ def set_params():
 		if '=' in elem:
 			positional = False
 
+	# Clean input
+	for i in range(len(sys.argv[3:])):
+		sys.argv[i] = sys.argv[i].lower()
+
 	# If they are positional set our options
 	if positional:
-		parameters['input_path'] = sys.argv[1]
+		parameters['input'] = sys.argv[1]
 		
 		if len(sys.argv) > 2:
-			parameters['output_path'] = sys.argv[2]
+			parameters['output'] = sys.argv[2]
 		if len(sys.argv) > 3:
 			parameters['hash_func'] = sys.argv[3]
 		if len(sys.argv) > 4:
@@ -145,10 +149,10 @@ def set_params():
 	else: 
 		# Check for = mismatch on input (allowed)
 		if '=' not in sys.argv[1]:
-				parameters['input_path'] = sys.argv[1]
+				parameters['input'] = sys.argv[1]
 		# Check for = mismatch on output (allowed)
 		if len(sys.argv) > 2 and '=' not in sys.argv[2]:
-				parameters['output_path'] = sys.argv[2]
+				parameters['output'] = sys.argv[2]
 
 		# Set the named parameters. = mismatch not allowed from here on.
 		for elem in sys.argv[1:]:
@@ -171,8 +175,8 @@ if __name__ == '__main__':
 	set_params()
 
 	# Unpack parameters
-	input_path = parameters['input_path']
-	output_path = parameters['output_path']
+	input_path = parameters['input']
+	output_path = parameters['output']
 	hash_func = parameters['hash_func']
 	mod = parameters['mod']
 	bucket_size = parameters['bucket_size']
@@ -188,7 +192,7 @@ if __name__ == '__main__':
 
 	# Run the hashtable
 	for elem in input_gen:
-		hash_table.hash(elem)
+		hash_table.add(elem)
 
 	# Record the output:
 	fileIO.write_outp(hash_table, output_path)

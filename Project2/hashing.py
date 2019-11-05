@@ -10,7 +10,7 @@ class hash_table:
 							'chaining': self.chaining}
 
 		# dictionary of accptable hash types, mapped yadda-yadda
-		hashes = {'class': self.hash, 'student': self.hash}
+		hashes = {'class': self.class_hash, 'student': self.my_hash}
 
 		# Store the parameters for this table iff acceptable, default otherwise
 		self.size = size if size > 0 else 120
@@ -74,7 +74,7 @@ class hash_table:
 		else:
 			print(f"The hash-type, {hash_type}, is not valid. Defaulting to ", \
 					"the in-class hash.")
-			self.hash_func = self.hash
+			self.hash_func = self.class_hash
 
 	class link:
 		def __init__(self, value=None, next_link=None):
@@ -108,7 +108,7 @@ class hash_table:
 			new_hash = (new_hash + c1 * count + c2 * count**2) % self.mod
 			
 
-			yield new_hash
+			yield int(new_hash)
 
 		if count == self.size:
 			yield None
@@ -139,8 +139,8 @@ class hash_table:
 
 		return new_hash
 
-	def hash(self, elem):
-		hash_key = elem % self.mod
+	def add(self, elem):
+		hash_key = self.hash_func(elem)
 
 		# split function based on bucket size
 		if self.bucket_size == 1:
@@ -170,9 +170,10 @@ class hash_table:
 
 			# special case for chaining
 			else:
-				# if empty place here
+				# if empty place here and remove freespace entry
 				if self.table[hash_key].value is None:
 					self.table[hash_key].value = elem
+					self.freespace.remove(hash_key)
 
 				else:
 					# increment collision counter
@@ -207,8 +208,43 @@ class hash_table:
 						self.unplaced.append(elem)
 						break
 
+	def class_hash(self, elem):
+		return elem % self.mod
+
 	def my_hash(self, elem):
-		return
+		# middle-square
+		hash_key = str(elem**2)
+
+		# if result is too big
+		if len(hash_key) > len(str(self.size)):
+			cut = len(hash_key) - len(str(self.size))
+
+			if cut % 2 == 0:
+				cut = int(cut / 2)
+				hash_key = hash_key[cut:]
+				hash_key = hash_key[:-cut]
+			else:
+				ceil = int((cut - 1)  / 2)
+				floor = int((cut + 1) / 2)
+				hash_key = hash_key[ceil:]
+				hash_key = hash_key[:-floor]
+
+			assert(len(hash_key) <= 3 and len(hash_key) > 0)
+
+		# fit to table
+		if len(hash_key) == len(str(self.size)):
+			if int(hash_key) > self.size:
+				temp = int(hash_key)
+
+				while temp > self.size:
+					temp = temp % 10**(len(str(self.size)) - 1)
+
+				hash_key = str(temp)
+
+		return int(hash_key)
+
+		
+
 
 	def to_string(self):
 		# string we'll output later
