@@ -3,7 +3,7 @@ class hash_table:
 	Constructor for hash table
 	"""
 	def __init__(self, size=120, mod=120, bucket_size=3, collision='quadratic', \
-						c=[0,1], hash='class'):
+						c=[0,1], hash_func='class'):
 
 		# dictionary of accepatable collision types, mapped to the proper func.
 		collisions = {'linear': self.linear, 'quadratic': self.quadratic, \
@@ -30,12 +30,14 @@ class hash_table:
 
 		# Initialize collision and c
 		self.collision = None
+		self.collision_raw = ''
 		self.c = list()
 
 		# Error check and set collision and c
 		if collision in collisions.keys():
 			self.collision = collisions[collision]
 			self.c = c
+			self.collision_raw = collision
 		else:
 			# Tell user what we're defaulting
 			print(f"The specified collision method {collision} is not valid. ", \
@@ -43,27 +45,28 @@ class hash_table:
 
 			# Default
 			self.collision=self.quadratic
+			self.collision_raw = 'quadratic'
 			self.c = [0,1]
 		
 		
 		# Initialize the table
 		self.table = list()
 		# if bucket size > 1 table consists of empty lists
-		if self.bucket_size > 1:
+		if self.bucket_size > 1 or self.collision == self.chaining:
 			self.table = [list() for _ in range(self.size)]
 
 		# otherwise table consists of Nones (emptys)
-		# we take care of chaining in the chaining function
 		else:
 			self.table = [None] * self.size
 
 		# Set the hash function (class vs mine)
-		if hash in hashes.keys():
-			self.hash = hashes[hash]
+		self.hash_func = None
+		if hash_func in hashes.keys():
+			self.hash_func = hashes[hash_func]
 		else:
 			print(f"The hash-type, {hash_type}, is not valid. Defaulting to ", \
 					"the in-class hash.")
-			self.hash = self.class_hash
+			self.hash_func = self.hash
 
 
 	def linear(self, hash_key):
@@ -99,8 +102,7 @@ class hash_table:
 	def chaining(self, hash_key):
 		# turn non-list buckets into lists as necessary
 		if type(self.table[hash_key]) is not list:
-			temp = self.table[hash_key]
-			self.table[hash_key] = [temp]
+			self.table[hash_key] = list()
 			yield hash_key
 		
 		return
@@ -110,7 +112,7 @@ class hash_table:
 
 		# split function based on bucket size
 		if self.bucket_size == 1:
-			if self.collision is not self.chaining:
+			if self.collision != self.chaining:
 				if self.table[hash_key] is None:
 					self.table[hash_key] = elem
 
@@ -129,6 +131,7 @@ class hash_table:
 		# bucket size > 1
 		else:
 			if len(self.table[hash_key]) < self.bucket_size:
+				self.table[hash_key]
 				self.table[hash_key].append(elem)
 
 			else:
@@ -161,7 +164,8 @@ class hash_table:
 			return prints, outp
 
 		# Split on bucket size and chaining strat
-		if self.bucket_size == 1 and self.collision is not self.chaining:
+		if self.bucket_size == 1 and self.collision != self.chaining:
+
 			for bucket in self.table:
 				if bucket == None:
 					outp += _nothing
@@ -171,20 +175,6 @@ class hash_table:
 				outp += " "
 
 				prints, outp = _next_line(prints, outp)
-
-		# if we did use chaining
-		elif self.collision is self.chaining:
-			for bucket in self.table:
-				if len(bucket) == 0:
-					outp += _nothing + " "
-					
-					prints, outp = _next_line(prints, outp)
-
-				else:
-					for elem in bucket:
-						outp += str(elem) + " "
-
-						prints, outp = _next_line(prints, outp)
 
 		# if we didn't use chaining and our bucket size > 1
 		elif self.bucket_size > 1:
@@ -202,5 +192,27 @@ class hash_table:
 					outp += (_nothing + " ") * fill
 
 				outp += "\n"
+
+		# if we did use chaining
+		elif self.collision == self.chaining:
+			for bucket in self.table:
+
+				if len(bucket) == 0:
+					outp += _nothing + " "
+					
+					prints, outp = _next_line(prints, outp)
+
+				else:
+					
+					for elem in bucket:
+						outp += str(elem) + " "
+
+						prints, outp = _next_line(prints, outp)
+
+			# fill if necessary
+			for _ in range(5 - prints):
+
+				outp += _nothing + " "
+				prints, outp = _next_line(prints, outp)
 
 		return outp

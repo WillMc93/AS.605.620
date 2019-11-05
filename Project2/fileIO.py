@@ -23,7 +23,7 @@ def write_outp(table, path):
 	with open(path, 'w') as file:
 		file.write(table.to_string())
 
-		file.write("-" * 78)
+		file.write("-" * 78 + "\n")
 
 		file.write("Statistics -- \n")
 		"""file.write(f"\tCollisions: {table.collisions} \n")

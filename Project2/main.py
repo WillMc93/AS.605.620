@@ -180,7 +180,7 @@ if __name__ == '__main__':
 	c = parameters['c']
 
 	# Initialize the hash table
-	hash_table = hashing.hash_table(hash=hash_method, mod=mod,
+	hash_table = hashing.hash_table(hash_func=hash_method, mod=mod,
 									bucket_size=bucket_size, collision=collision, 
 									c=c)
 
