@@ -26,6 +26,10 @@ def write_outp(table, path):
 		file.write("-" * 78 + "\n")
 
 		file.write("Statistics -- \n")
-		file.write(f"\tCollisions: {table.collisions_count} \n")
-		file.write(f"\tUnplacable: {table.unplaced} \n")
+		file.write(f"\tCollisions: {table.prim_coll_count} \n")
+
+		if len(table.unplaced) == 0:
+			file.write("\tAll values were able to be placed into the table.")
+		else:
+			file.write(f"\tUnplaced values: {table.unplaced} \n")
 		

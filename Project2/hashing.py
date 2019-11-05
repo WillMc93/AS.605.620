@@ -17,7 +17,8 @@ class hash_table:
 		self.bucket_size = bucket_size if bucket_size > 0 else 3
 		self.mod = mod if mod > 1 else 120
 
-		self.collisions_count = 0
+		self.prim_coll_count = 0
+		self.sec_coll_count = 0 # only used for chaining
 		self.unplaced = []
 
 
@@ -33,14 +34,13 @@ class hash_table:
 
 		# Initialize collision and c
 		self.collision = None
-		self.collision_raw = ''
 		self.c = list()
 
 		# Error check and set collision and c
 		if collision in collisions.keys():
 			self.collision = collisions[collision]
 			self.c = c
-			self.collision_raw = collision
+
 		else:
 			# Tell user what we're defaulting
 			print(f"The specified collision method {collision} is not valid. ", \
@@ -48,19 +48,26 @@ class hash_table:
 
 			# Default
 			self.collision=self.quadratic
-			self.collision_raw = 'quadratic'
 			self.c = [0,1]
 		
 		
 		# Initialize the table
 		self.table = list()
-		# if bucket size > 1 table consists of empty lists
-		if self.bucket_size > 1 or self.collision == self.chaining:
+		# if bucket size == 1 (and not chaining) table consists of empty of Nones
+		if self.bucket_size == 1 and self.collision != self.chaining:
+			self.table = [None] * self.size
+
+		# otherwise table consists of empty lists unless chaining
+		elif self.bucket_size > 1:
 			self.table = [list() for _ in range(self.size)]
 
-		# otherwise table consists of Nones (emptys)
-		else:
-			self.table = [None] * self.size
+		elif self.collision == self.chaining:
+			self.table = [self.link() for _ in range(self.size)]
+
+		# Freespace stack for chaining
+		self.freespace = None
+		if self.collision == self.chaining:
+			self.freespace = [i for i in range(self.size)]			
 
 		# Set the hash function (class vs mine)
 		self.hash_func = None
@@ -71,6 +78,11 @@ class hash_table:
 					"the in-class hash.")
 			self.hash_func = self.hash
 
+	class link:
+		def __init__(self, value=None, next_link=None):
+			self.value = value
+			self.next_link = next_link
+
 
 	def linear(self, hash_key):
 		# keep track of probes
@@ -79,9 +91,8 @@ class hash_table:
 		# keep yielding hashes until we find a usable bucket
 		new_hash = hash_key
 		while count < self.size:
-			self.collisions_count += 1
-			new_hash = new_hash + 1 if new_hash + 1 < self.size else 0
 			count += 1
+			new_hash = new_hash + 1 if new_hash + 1 < self.size else 0
 
 			yield new_hash
 
@@ -94,10 +105,10 @@ class hash_table:
 		# keep yielding hashes until we find a useable bucket
 		new_hash = hash_key
 		while count < self.size:
-			self.collisions_count += 1
+			count += 1
 			c1, c2 = self.c
 			new_hash = (new_hash + c1 * count + c2 * count**2) % self.mod
-			count += 1
+			
 
 			yield new_hash
 
@@ -107,51 +118,95 @@ class hash_table:
 		return
 
 	def chaining(self, hash_key):
-		# dummy function.
-		# just update the collision counter
+		# linear probe for space but make reference in link
+		count = 0
 
-		if len(self.table[hash_key]) > 0:
-			self.collisions_count += 1
-		
-		return
+		assert(self.freespace != None)
+
+		# if table is full skip all this
+		if len(self.freespace) < 1:
+			return None
+
+		new_hash = hash_key
+		occupant = self.table[hash_key]
+
+		# Traverse the chain of already collided entries
+		while occupant.next_link != None:
+			new_hash = occupant.next_link
+			occupant = self.table[new_hash]
+
+		# Pop Next Free Slot off stack
+		new_hash = self.freespace.pop()
+		occupant.next_link = new_hash
+
+		return new_hash
 
 	def hash(self, elem):
 		hash_key = elem % self.mod
 
 		# split function based on bucket size
 		if self.bucket_size == 1:
+			# split bucket_size == 1 on chaining
 			if self.collision != self.chaining:
+				# if empty, place here
 				if self.table[hash_key] is None:
 					self.table[hash_key] = elem
 
+				# otherwise, probe for an empty bucket
 				else:
-					# probe for an empty bucket
 					for p in self.collision(hash_key):
-						if p is None:
-							self.unable.append(elem)
-							break
+						# increment collision count
+						self.prim_coll_count += 1
 
-						if self.table[p] is None:
+						# if hash found and empty, place here
+						if p is not None and self.table[p] is None:
 							self.table[p] = elem
 							break
 
+						# otherwise if no hash was found (table full)
+						elif p is None:
+							self.unable.append(elem)
+							self.prim_coll_count -= 1 # last one don't count
+							break
+
+
 			# special case for chaining
 			else:
-				self.collision(hash_key)
-				self.table[hash_key].append(elem)
+				# if empty place here
+				if self.table[hash_key].value is None:
+					self.table[hash_key].value = elem
+
+				else:
+					# increment collision counter
+					self.prim_coll_count += 1
+
+					# find a hash
+					hash_key = self.collision(hash_key)
+
+					# if suitable hash was found place it
+					if hash_key is not None:
+						self.table[hash_key].value = elem
+					else:
+						self.unplaced.append(elem)
 
 		# bucket size > 1
 		else:
+			# if space in this bucket, place here
 			if len(self.table[hash_key]) < self.bucket_size:
-				self.table[hash_key]
 				self.table[hash_key].append(elem)
 
+			# otherwise, search for hash
 			else:
 				for p in self.collision(hash_key):
-					if len(self.table[p]) < self.bucket_size:
-						if p is None:
-							self.unable.append()
+					self.prim_coll_count += 1
+
+					if p is not None and len(self.table[p]) < self.bucket_size:
 						self.table[p].append(elem)
+						break
+
+					elif p is None:
+						self.prim_coll_count -= 1 # last one don't count
+						self.unplaced.append(elem)
 						break
 
 	def my_hash(self, elem):
@@ -177,6 +232,9 @@ class hash_table:
 
 			return prints, outp
 
+		def _fill(value):
+			return " " * (len(_nothing) - len(str(value)))
+
 		# Split on bucket size and chaining strat
 		if self.bucket_size == 1 and self.collision != self.chaining:
 
@@ -184,7 +242,7 @@ class hash_table:
 				if bucket == None:
 					outp += _nothing
 				else:
-					outp += str(bucket)
+					outp += _fill(bucket) + str(bucket)
 
 				outp += " "
 
@@ -193,14 +251,14 @@ class hash_table:
 		# if we didn't use chaining and our bucket size > 1
 		elif self.bucket_size > 1:
 			for i in range(self.size):
-				outp += str(i) + " " * 4
+				outp += str(i) + _fill(i)
 
 				if len(self.table[i]) == 0:
 					outp += (_nothing + " ") * 3
 
 				else:
 					for elem in self.table[i]:
-						outp += str(elem) + " "
+						outp += _fill(elem) + str(elem) + " "
 
 					fill = self.bucket_size - len(self.table[i])
 					outp += (_nothing + " ") * fill
@@ -210,23 +268,13 @@ class hash_table:
 		# if we did use chaining
 		elif self.collision == self.chaining:
 			for bucket in self.table:
-
-				if len(bucket) == 0:
-					outp += _nothing + " "
-					
-					prints, outp = _next_line(prints, outp)
-
+				if bucket.value == None:
+					outp += _nothing
 				else:
-					
-					for elem in bucket:
-						outp += str(elem) + " "
+					outp += _fill(bucket.value) + str(bucket.value)
 
-						prints, outp = _next_line(prints, outp)
+				outp += " "
 
-			# fill if necessary
-			for _ in range(5 - prints):
-
-				outp += _nothing + " "
 				prints, outp = _next_line(prints, outp)
 
 		return outp

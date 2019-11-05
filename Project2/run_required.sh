@@ -1,5 +1,3 @@
-#! /usr/bin/bash
-
 python3 main.py ./input.txt ./outputs/output1.out class 120 1 linear
 python3 main.py ./input.txt ./outputs/output2.out class 120 1 quadratic [0,1]
 python3 main.py ./input.txt ./outputs/output3.out class 120 1 chaining
