@@ -1,8 +1,22 @@
+"""
+hash_table takes care of storing, maintaining, and interacting with
+the hash table.
+
+@authour Will McElhenney
+@date 11/6/2019
+"""
 class hash_table:
 	"""
 	Constructor for hash table
+
+	@param size: integer for the size of the table
+	@param mod: integer for the class modulo hash function
+	@param bucket_size: integer for the size of the buckets
+	@param collision: string for the collision method to be used
+	@param c: c values for quadratic collisions
+	@param hash_func: string for class hash or student hash
 	"""
-	def __init__(self, size=120, mod=120, bucket_size=3, collision='quadratic', \
+	def __init__(self, size=120, mod=120, bucket_size=1, collision='quadratic', \
 						c=[0,1], hash_func='class'):
 
 		# dictionary of accepatable collision types, mapped to the proper func.
@@ -14,7 +28,7 @@ class hash_table:
 
 		# Store the parameters for this table iff acceptable, default otherwise
 		self.size = size if size > 0 else 120
-		self.bucket_size = bucket_size if bucket_size > 0 else 3
+		self.bucket_size = bucket_size if bucket_size > 0 else 1
 		self.mod = mod if mod > 1 else 120
 		self.prim_coll_count = 0
 		self.unplaced = []
@@ -62,7 +76,7 @@ class hash_table:
 		elif self.collision == self.chaining:
 			self.table = [self.link() for _ in range(self.size)]
 
-		# Freespace stack for chaining
+		# Initialize freespace stack for chaining
 		self.freespace = None
 		if self.collision == self.chaining:
 			self.freespace = [i for i in range(self.size)]			
@@ -76,12 +90,26 @@ class hash_table:
 					"the in-class hash.")
 			self.hash_func = self.class_hash
 
+	"""
+	Internal link object for "node" in chained hash
+	"""
 	class link:
+		"""
+		Constructor
+
+		@param value: value to be entered into hash_table
+		@param next_link: int representing the index of the next link
+		"""
 		def __init__(self, value=None, next_link=None):
 			self.value = value
 			self.next_link = next_link
 
 
+	"""
+	Linear probing function
+
+	@param hash_key: hash key originally generated
+	"""
 	def linear(self, hash_key):
 		# keep track of probes
 		count = 0
@@ -94,8 +122,17 @@ class hash_table:
 
 			yield new_hash
 
+		if count == self.size:
+			yield None
+
 		return
 	
+	"""
+	Quadratic probing function. 
+	Could be combined with linear, but it was messy when I tried.
+
+	@param hash_key: hash key originally generated
+	"""
 	def quadratic(self, hash_key):
 		# keep track of probes (i)
 		count = 0
@@ -115,6 +152,12 @@ class hash_table:
 
 		return
 
+	"""
+	Chaining collision function. Maintains free space in self.freespace, and 
+	updates previous link in chain.
+
+	@param hash_key: hash key originally generated
+	"""
 	def chaining(self, hash_key):
 		# linear probe for space but make reference in link
 		count = 0
@@ -139,6 +182,14 @@ class hash_table:
 
 		return new_hash
 
+	"""
+	Function to add items to the hash table. Tries to put the item in by calling
+	the hash function, but if it can't it calls the probing function.
+
+	Could be neater. 
+
+	@param elem: value to be added to the hash table
+	"""
 	def add(self, elem):
 		hash_key = self.hash_func(elem)
 
@@ -199,18 +250,31 @@ class hash_table:
 				for p in self.collision(hash_key):
 					self.prim_coll_count += 1
 
+					# if p is not None and there is room in this bucket
 					if p is not None and len(self.table[p]) < self.bucket_size:
 						self.table[p].append(elem)
 						break
 
+					# uh-oh
 					elif p is None:
 						self.prim_coll_count -= 1 # last one don't count
 						self.unplaced.append(elem)
 						break
 
+	"""
+	class_hash is the default hash function
+
+	@param elem: value to be added to the hash table
+	"""
 	def class_hash(self, elem):
 		return elem % self.mod
 
+	"""
+	my_hash is the hash I provide. It is riff on middle-square hashing, 
+	technically a type of multiplicative hashing.
+
+	@parm elem: value to be added to the hash table
+	"""
 	def my_hash(self, elem):
 		# middle-square
 		hash_key = str(elem**2)
@@ -232,6 +296,8 @@ class hash_table:
 			assert(len(hash_key) <= 3 and len(hash_key) > 0)
 
 		# fit to table
+		# Here's where I had to get a little creative. Because the table is
+		# short and includes {11} we have to fit the middle-square to the table
 		if len(hash_key) == len(str(self.size)):
 			if int(hash_key) > self.size:
 				temp = int(hash_key)
@@ -243,10 +309,10 @@ class hash_table:
 
 		return int(hash_key)
 
-		
-
-
-	def to_string(self):
+	"""
+	Function to produce a string representation of the table.
+	"""
+	def to_string(self, nothing=5):
 		# string we'll output later
 		outp = str()
 
@@ -254,10 +320,10 @@ class hash_table:
 		prints = 0
 
 		# typed this one too many times
-		_nothing = "-" * 5
+		_nothing = "-" * nothing
 
-		# didn't want to have type this over and over
-		# this isn't the best solution, probably
+		# takes prints and outp from the loop and gives it an increment and a
+		# newline if need be
 		def _next_line(prints, outp):
 			prints += 1
 			if prints > 4:
@@ -266,12 +332,12 @@ class hash_table:
 
 			return prints, outp
 
+		# returns appropriate amount of space for length of given value
 		def _fill(value):
 			return " " * (len(_nothing) - len(str(value)))
 
 		# Split on bucket size and chaining strat
 		if self.bucket_size == 1 and self.collision != self.chaining:
-
 			for bucket in self.table:
 				if bucket == None:
 					outp += _nothing
@@ -283,7 +349,7 @@ class hash_table:
 				prints, outp = _next_line(prints, outp)
 
 		# if we didn't use chaining and our bucket size > 1
-		elif self.bucket_size > 1:
+		elif self.bucket_size > 1 and self.collision != self.chaining:
 			for i in range(self.size):
 				outp += str(i) + _fill(i)
 

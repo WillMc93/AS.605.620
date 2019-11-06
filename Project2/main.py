@@ -1,8 +1,14 @@
-import hashing
-import fileIO
-import sys
-import re
+"""
+File containing the parts necessary to run this sucker.
+"""
 
+# Imports
+import hashing # our hash table object
+import fileIO # our fileIO functions
+import sys # parameter grabbing
+import re # regular expressions
+
+# Useful lists/dicts
 DEFAULTS = {'input': '', 'output': './outputs/default_output.txt', \
 						'hash_func': 'class', 'mod': 120, 'bucket_size': 3, \
 						'collision': 'quadratic', 'c': [0,1]}
@@ -15,9 +21,14 @@ c_pat = r'\[(?P<c1>[0-9]+.{0,1}[0-9]*),[\s]*(?P<c2>[0-9]+.{0,1}[0-9]*)\]'
 int_pat = r'[0-9]+'
 str_pat = r'[A-Za-z0-9/\\._]+'
 
-
+# parameter initialization
 parameters = DEFAULTS.copy()
 
+"""
+Function for the help menu because I couldn't remember when I was testing.
+
+Can be invoked by calling 'python3 main.py --help' from terminal.
+"""
 def help():
 	print("Usage: main.py [input_path] [output_path] [hash_func] [mod]", \
 				"[bucket_size] [collision] [c]")
@@ -34,14 +45,21 @@ def help():
 	print("\tcollision: 'linear' 'quadratic' or 'chaining'")
 	print("\tc: c1 and c2 for quadratic in list i.e. [c1,c2]")
 
+"""
+Function to parse a non-positional argument. Non-positional arguments take the
+form [param]=[value] when called from terminal.
+
+@param option: string that should be of the form [parm]=[value] for setting 
+				the table arguments
+"""
 def parse(option):
 	# Check option for parameter match
-	match = re.fullmatch(param_pat, option)
+	form = re.fullmatch(param_pat, option)
 
 	# Ooops, not valid
-	if not match:
-		print(f"Parameter, {option}, is not valid. This likely ", \
-				"results in default behviour.")
+	if not form:
+		print(f"Parameter, {option}, is not formatted correctly valid. "
+				"This likely results in default behviour.")
 		return None
 
 	# Set the parameter
@@ -49,9 +67,11 @@ def parse(option):
 		param = match.group('parameter')
 		value = match.group('value')
 
+		# if the specified param is not valid, let the user know.
 		if param not in DEFAULTS.keys():
 			print(f"The parameter, {param}, is not a valid option. " \
 					"This likely results in default behaviour.")
+			return None
 		
 		# mod or bucket size parameters
 		if param in INT_PARAMS:
@@ -95,18 +115,14 @@ def parse(option):
 		return None
 
 def set_params():
+	# if no parameters were provided bring up help menu
 	if len(sys.argv) == 1:
 		help()
 		return
 
+	# if only one parameter was provided and it is for help
 	if len(sys.argv) == 2 and sys.argv[1] == '--help':
 		help()
-		return
-
-	if len(sys.argv) < 2:
-		print(f"The program must be run with at least an input path, but ", \
-				"no parameters were found. Check your command input ", \
-				"and try again.")
 		return
 
 	# Check to see if input parameters are positional
@@ -114,8 +130,9 @@ def set_params():
 	for elem in sys.argv[1:]:
 		if '=' in elem:
 			positional = False
+			break
 
-	# Clean input
+	# Clean input to lower cases (except paths)
 	for i in range(len(sys.argv[3:])):
 		sys.argv[i] = sys.argv[i].lower()
 
@@ -147,14 +164,7 @@ def set_params():
 		return
 		
 	else: 
-		# Check for = mismatch on input (allowed)
-		if '=' not in sys.argv[1]:
-				parameters['input'] = sys.argv[1]
-		# Check for = mismatch on output (allowed)
-		if len(sys.argv) > 2 and '=' not in sys.argv[2]:
-				parameters['output'] = sys.argv[2]
-
-		# Set the named parameters. = mismatch not allowed from here on.
+		# Set the named parameters.
 		for elem in sys.argv[1:]:
 			# Parse the input
 			option = parse(elem)
@@ -168,11 +178,22 @@ def set_params():
 				# just default.
 				continue
 
+		# check that input has been set
+		if parameters['input'] == '':
+			print("No input path was provided. Check your input and try again.")
+			raise ValueError
+
 	return
 
+"""
+MAIN function
+"""
 if __name__ == '__main__':
 	# Run the set parameters function. Takes care of all input parameters.
-	set_params()
+	try:
+		set_params()
+	except ValueError:
+		return
 
 	# Unpack parameters
 	input_path = parameters['input']
@@ -188,14 +209,17 @@ if __name__ == '__main__':
 									bucket_size=bucket_size, collision=collision, 
 									c=c)
 
-	input_gen = fileIO.read_input(input_path)
+	# Get ready to read input
+	input_gen = None
+	try:
+		input_gen = fileIO.read_input(input_path)
+	except FileNotFoundError:
+		print(f"The provided input path, {input_path}. Could not be found. ", \
+				"Please check your input and try again.")
 
-	# Run the hashtable
+	# Read into the hash table
 	for elem in input_gen:
 		hash_table.add(elem)
 
-	# Record the output:
+	# Record the output
 	fileIO.write_outp(hash_table, output_path)
-
-
-
