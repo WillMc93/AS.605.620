@@ -10,14 +10,17 @@ File containing the parts necessary to run this sucker "safely."
 @date 11/6/2019
 """
 
+# Libarary imports
+import sys # parameter grabbing
+import re # regular expressions
+
 # Realitive path to the code folder
 sys.path.append('./code/')
 
-# Imports
+# Custom imports
 import hashing # our hash table object
 import fileIO # our fileIO functions
-import sys # parameter grabbing
-import re # regular expressions
+
 
 # Useful lists/dicts
 DEFAULTS = {'input': '', 'output': './outputs/default_output.txt', \

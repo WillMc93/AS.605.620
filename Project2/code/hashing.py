@@ -109,7 +109,7 @@ class hash_table:
 	"""
 	Function for calculating how full table is
 	"""
-	def fill_ratio():
+	def fill_ratio(self):
 		return self.entered / (self.size * self.bucket_size)
 
 	"""
@@ -269,7 +269,6 @@ class hash_table:
 						break
 
 		self.entered += 1
-		self.
 
 	"""
 	class_hash is the default hash function

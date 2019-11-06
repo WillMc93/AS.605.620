@@ -53,5 +53,5 @@ def write_outp(table, path):
 		else:
 			file.write(f"\tUnplaced values: {table.unplaced} \n")
 
-		file.write(f"\tFill Ratio: {table.full_ratio} \n")
+		file.write(f"\tFill Ratio: {table.fill_ratio()} \n")
 		
