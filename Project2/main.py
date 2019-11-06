@@ -1,5 +1,5 @@
 """
-File containing the parts necessary to run this sucker.
+File containing the parts necessary to run this sucker "safely."
 """
 
 # Imports
@@ -64,8 +64,8 @@ def parse(option):
 
 	# Set the parameter
 	else:
-		param = match.group('parameter')
-		value = match.group('value')
+		param = form.group('parameter')
+		value = form.group('value')
 
 		# if the specified param is not valid, let the user know.
 		if param not in DEFAULTS.keys():
@@ -193,7 +193,7 @@ if __name__ == '__main__':
 	try:
 		set_params()
 	except ValueError:
-		return
+		quit()
 
 	# Unpack parameters
 	input_path = parameters['input']
