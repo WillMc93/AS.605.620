@@ -30,9 +30,11 @@ class hash_table:
 		self.size = size if size > 0 else 120
 		self.bucket_size = bucket_size if bucket_size > 0 else 1
 		self.mod = mod if mod > 1 else 120
-		self.prim_coll_count = 0
-		self.unplaced = []
-
+		
+		self.prim_coll_count = 0 # collision count
+		self.unplaced = [] # items that couldn't be added
+		self.entered = 0 # number of items entered into the table
+		
 
 		# Tell user if we defaulted
 		if size <= 0:
@@ -70,7 +72,7 @@ class hash_table:
 			self.table = [None] * self.size
 
 		# otherwise table consists of empty lists unless chaining
-		elif self.bucket_size > 1:
+		elif self.bucket_size > 1 and self.collision != self.chaining:
 			self.table = [list() for _ in range(self.size)]
 
 		elif self.collision == self.chaining:
@@ -104,6 +106,11 @@ class hash_table:
 			self.value = value
 			self.next_link = next_link
 
+	"""
+	Function for calculating how full table is
+	"""
+	def fill_ratio():
+		return self.entered / (self.size * self.bucket_size)
 
 	"""
 	Linear probing function
@@ -261,6 +268,9 @@ class hash_table:
 						self.unplaced.append(elem)
 						break
 
+		self.entered += 1
+		self.
+
 	"""
 	class_hash is the default hash function
 
@@ -302,8 +312,8 @@ class hash_table:
 			if int(hash_key) > self.size:
 				temp = int(hash_key)
 
-				while temp > self.size:
-					temp = temp % 10**(len(str(self.size)) - 1)
+				if temp > self.size:
+					temp = temp % self.size
 
 				hash_key = str(temp)
 

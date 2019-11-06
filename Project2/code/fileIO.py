@@ -49,7 +49,9 @@ def write_outp(table, path):
 		file.write(f"\tCollisions: {table.prim_coll_count} \n")
 
 		if len(table.unplaced) < 1:
-			file.write("\tAll values were able to be placed into the table.")
+			file.write("\tAll values were able to be placed into the table. \n")
 		else:
 			file.write(f"\tUnplaced values: {table.unplaced} \n")
+
+		file.write(f"\tFill Ratio: {table.full_ratio} \n")
 		
