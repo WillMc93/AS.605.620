@@ -1,6 +1,17 @@
+#!/usr/bin/python3
+#!/usr/bin/env python3
+
 """
+605.420.81 Project 2 - Hash Tables
+
 File containing the parts necessary to run this sucker "safely."
+
+@authour William McElhenney
+@date 11/6/2019
 """
+
+# Realitive path to the code folder
+sys.path.append('./code/')
 
 # Imports
 import hashing # our hash table object
@@ -27,10 +38,10 @@ parameters = DEFAULTS.copy()
 """
 Function for the help menu because I couldn't remember when I was testing.
 
-Can be invoked by calling 'python3 main.py --help' from terminal.
+Can be invoked by calling 'python3 project2.py --help' from terminal.
 """
 def help():
-	print("Usage: main.py [input_path] [output_path] [hash_func] [mod]", \
+	print("Usage: project2.py [input_path] [output_path] [hash_func] [mod]", \
 				"[bucket_size] [collision] [c]")
 	print("Arguments may be entered positionally as above, ", \
 			"or with prefixes (e.g. --input_path=[path])")
