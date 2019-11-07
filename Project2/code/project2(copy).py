@@ -10,14 +10,17 @@ File containing the parts necessary to run this sucker "safely."
 @date 11/6/2019
 """
 
+# Libarary imports
+import sys # parameter grabbing
+import re # regular expressions
+
 # Realitive path to the code folder
 sys.path.append('./code/')
 
-# Imports
+# Custom imports
 import hashing # our hash table object
 import fileIO # our fileIO functions
-import sys # parameter grabbing
-import re # regular expressions
+
 
 # Useful lists/dicts
 DEFAULTS = {'input': '', 'output': './outputs/default_output.txt', \
@@ -47,8 +50,7 @@ def help():
 			"or with prefixes (e.g. --input_path=[path])")
 	print("If using a named parameter all must be named ", \
 			"(except for input and output which are checked for).")
-	print("Defaults: 'class', 120, 1, ", \
-			"'quadratic', [0.5,0.5]")
+	print("Defaults: class, 120, 1, quadratic, [0.5,0.5]")
 	print("\nOptions: ")
 	print("\thash_func: choose between 'class' or 'student'")
 	print("\tmod: mod value for class hash")
