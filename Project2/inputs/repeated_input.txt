@@ -1,3 +1,10 @@
+# This file allows us to see how the probing strategies work by hasing the same
+# number again and again.
+
+00011
+00011
+00011
+00011
 00011
 00011
 00011

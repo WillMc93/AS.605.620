@@ -17,7 +17,7 @@ class hash_table:
 	@param hash_func: string for class hash or student hash
 	"""
 	def __init__(self, size=120, mod=120, bucket_size=1, collision='quadratic', \
-						c=[0,1], hash_func='class'):
+						c=[0.5,0.5], hash_func='class'):
 
 		# dictionary of accepatable collision types, mapped to the proper func.
 		collisions = {'linear': self.linear, 'quadratic': self.quadratic, \
@@ -58,11 +58,11 @@ class hash_table:
 		else:
 			# Tell user what we're defaulting
 			print(f"The specified collision method {collision} is not valid. ", \
-					"Defaulting to Quadratic with c=[0,1]")
+					"Defaulting to Quadratic with c=[0.5,0.5]")
 
 			# Default
 			self.collision=self.quadratic
-			self.c = [0,1]
+			self.c = [0.5,0.5]
 		
 		
 		# Initialize the table

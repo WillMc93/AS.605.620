@@ -22,7 +22,7 @@ import re # regular expressions
 # Useful lists/dicts
 DEFAULTS = {'input': '', 'output': './outputs/default_output.txt', \
 						'hash_func': 'class', 'mod': 120, 'bucket_size': 1, \
-						'collision': 'quadratic', 'c': [0,1]}
+						'collision': 'quadratic', 'c': [0.5,0.5]}
 
 INT_PARAMS = ['mod', 'bucket_size']
 
@@ -48,7 +48,7 @@ def help():
 	print("If using a named parameter all must be named ", \
 			"(except for input and output which are checked for).")
 	print("Defaults: 'class', 120, 1, ", \
-			"'quadratic', [0,1]")
+			"'quadratic', [0.5,0.5]")
 	print("\nOptions: ")
 	print("\thash_func: choose between 'class' or 'student'")
 	print("\tmod: mod value for class hash")
@@ -120,7 +120,7 @@ def parse(option):
 
 			else:
 				print(f"The c parameters, {value}, are not valid. ", \
-						"This results in default behaviour ([0,1]).")
+						"This results in default behaviour ([0.5,0.5]).")
 
 		# Shouldn't get down here
 		return None
