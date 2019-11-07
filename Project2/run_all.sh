@@ -8,6 +8,13 @@ python3 project2.py ./inputs/repeated_input.txt ./outputs/repeated_output_quad.o
 python3 project2.py ./inputs/repeated_input.txt ./outputs/repeated_output_linear.out class 120 1 linear
 python3 project2.py ./inputs/repeated_input.txt ./outputs/repeated_output_chain.out class 120  1 chaining
 
+
+#	run a couple tests with too big a mod value
+python3 project2.py input=./inputs/class_input.txt output=./outputs/toobig1.out mod=220
+python3 project2.py input=./inputs/class_input.txt output=./outputs/toobig2.out mod=220 collision=linear
+
+
+
 # Run all required with class input
 python3 project2.py ./inputs/class_input.txt ./outputs/output1.out class 120 1 linear
 python3 project2.py ./inputs/class_input.txt ./outputs/output2.out class 120 1 quadratic [0.5,0.5]
@@ -33,6 +40,7 @@ python3 project2.py ./inputs/student_input.txt ./outputs/student_output8.out cla
 python3 project2.py input=./inputs/student_input.txt output=./outputs/student_output9.out hash_func=student bucket_size=1 collision=linear
 python3 project2.py input=./inputs/student_input.txt output=./outputs/student_output10.out hash_func=student bucket_size=1 collision=quadratic c=[0.5,0.5]
 python3 project2.py input=./inputs/student_input.txt output=./outputs/student_output11.out hash_func=student bucket_size=1 collision=chaining
+
 
 
 # Vary c values for quad with class input for schema 2,5,8,10

@@ -221,8 +221,15 @@ class hash_table:
 	def add(self, elem):
 		hash_key = self.hash_func(elem)
 
+		
+
+
 		# split function based on bucket size
 		if self.bucket_size == 1:
+			# error check
+			if hash_key > self.size:
+				hash_key = self.size - 1
+
 			# split bucket_size == 1 on chaining
 			if self.collision != self.chaining:
 				# if empty, place here
