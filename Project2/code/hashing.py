@@ -122,6 +122,8 @@ class hash_table:
 	Linear probing function
 
 	@param hash_key: hash key originally generated
+	@param size: gives the maximum this hash should be
+				 (useful for bucket_size > 1)
 	"""
 	def linear(self, hash_key, size=None):
 		# keep track of probes
@@ -149,6 +151,8 @@ class hash_table:
 	Could be combined with linear, but it was messy when I tried.
 
 	@param hash_key: hash key originally generated
+	@param size: gives the maximum this hash should be
+				 (useful for bucket_size > 1)
 	"""
 	def quadratic(self, hash_key, size=None):
 		# keep track of probes (i)
@@ -166,8 +170,8 @@ class hash_table:
 			new_hash = (new_hash + c1 * count + c2 * count**2) % self.mod
 
 			# Dr. Chlan specified mod 41 for the buckets but it don't work
-			if new_hash >= self.size:
-				new_hash = self.size - 1
+			if new_hash >= size:
+				new_hash = size - 1
 
 			yield int(new_hash)
 
