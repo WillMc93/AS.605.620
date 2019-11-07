@@ -10,7 +10,8 @@ In *nix systems with Python 3 installed, it can be executed
 
 			python3 project2.py input=[path] output=[path] hash_func=[func name] mod=[mod] bucket_size=[size] collision=[strategy] c=[[#,#]]
 
-The second of these (non-positional) is better in general, as we don't have to fill in extra info not needed by the collision strategy
+The second of these (non-positional) is better in general, as we don't have to fill in extra info not needed by the collision strategy.
+For the student hash method, I highly recommend using the named parameter method.
 
 
 For Windows, I'd highly recommend opening the project file from IDLE and
