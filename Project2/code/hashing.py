@@ -34,6 +34,11 @@ class hash_table:
 		self.prim_coll_count = 0 # collision count
 		self.unplaced = [] # items that couldn't be added
 		self.entered = 0 # number of items entered into the table
+
+
+		# Set actual size if bucket_size > 1
+		if bucket_size > 1:
+			self.size = int(self.size / self.bucket_size)
 		
 
 		# Tell user if we defaulted
@@ -73,7 +78,8 @@ class hash_table:
 
 		# otherwise table consists of empty lists unless chaining
 		elif self.bucket_size > 1 and self.collision != self.chaining:
-			self.table = [list() for _ in range(self.size)]
+			self.table = [[None for _ in range(self.bucket_size)] \
+							for _ in range(self.size)]
 
 		elif self.collision == self.chaining:
 			self.table = [self.link() for _ in range(self.size)]
@@ -117,19 +123,23 @@ class hash_table:
 
 	@param hash_key: hash key originally generated
 	"""
-	def linear(self, hash_key):
+	def linear(self, hash_key, size=None):
 		# keep track of probes
 		count = 0
 
+		# default if unset
+		if size == None:
+			size = self.size
+
 		# keep yielding hashes until we find a usable bucket
 		new_hash = hash_key
-		while count < self.size:
+		while count < size:
 			count += 1
-			new_hash = new_hash + 1 if new_hash + 1 < self.size else 0
-
+			new_hash = new_hash + 1 if new_hash + 1 < size else 0
+			
 			yield new_hash
 
-		if count == self.size:
+		if count == size:
 			yield None
 
 		return
@@ -140,21 +150,28 @@ class hash_table:
 
 	@param hash_key: hash key originally generated
 	"""
-	def quadratic(self, hash_key):
+	def quadratic(self, hash_key, size=None):
 		# keep track of probes (i)
 		count = 0
 
+		# default if unset
+		if size == None:
+			size = self.size
+
 		# keep yielding hashes until we find a useable bucket
 		new_hash = hash_key
-		while count < self.size:
+		while count < size:
 			count += 1
 			c1, c2 = self.c
 			new_hash = (new_hash + c1 * count + c2 * count**2) % self.mod
-			
+
+			# Dr. Chlan specified mod 41 for the buckets but it don't work
+			if new_hash >= self.size:
+				new_hash = self.size - 1
 
 			yield int(new_hash)
 
-		if count == self.size:
+		if count == size:
 			yield None
 
 		return
@@ -248,25 +265,34 @@ class hash_table:
 
 		# bucket size > 1
 		else:
+			slot = hash_key[1]
+			hash_key = hash_key[0]
 			# if space in this bucket, place here
-			if len(self.table[hash_key]) < self.bucket_size:
-				self.table[hash_key].append(elem)
+			#print(hash_key, slot, elem, self.mod)
+			if self.table[hash_key][slot] == None:
+				self.table[hash_key][slot] = elem
 
 			# otherwise, search for hash
 			else:
 				for p in self.collision(hash_key):
-					self.prim_coll_count += 1
+					for s in self.linear(slot, self.bucket_size):
+						self.prim_coll_count += 1
 
-					# if p is not None and there is room in this bucket
-					if p is not None and len(self.table[p]) < self.bucket_size:
-						self.table[p].append(elem)
-						break
+						# if p is not None and there is room in this bucket
+						if p is not None and s is not None and self.table[p][s] is None:
+							self.table[p][s] = elem
+							self.entered += 1
+							return
 
-					# uh-oh
-					elif p is None:
-						self.prim_coll_count -= 1 # last one don't count
-						self.unplaced.append(elem)
-						break
+						# if bucket is full
+						if s is None and p is not None:
+							break
+
+						# uh-oh (full table)
+						elif p is None and s is None:
+							self.prim_coll_count -= 1 # last one don't count
+							self.unplaced.append(elem)
+							return
 
 		self.entered += 1
 
@@ -276,7 +302,18 @@ class hash_table:
 	@param elem: value to be added to the hash table
 	"""
 	def class_hash(self, elem):
-		return elem % self.mod
+		hash_key = elem % self.mod
+
+		# Dr. Chlan gave 41 as modulo for a 40 slot table when bucket size = 3
+		# which can't work?
+
+		if self.bucket_size == 1:
+			return hash_key
+		elif self.bucket_size > 1:
+			hash_key = hash_key if hash_key < self.size else self.size - 1
+			slot = elem % self.bucket_size
+			return hash_key, slot
+
 
 	"""
 	my_hash is the hash I provide. It is riff on middle-square hashing, 
@@ -362,15 +399,11 @@ class hash_table:
 			for i in range(self.size):
 				outp += str(i) + _fill(i)
 
-				if len(self.table[i]) == 0:
-					outp += (_nothing + " ") * 3
-
-				else:
-					for elem in self.table[i]:
+				for elem in self.table[i]:
+					if elem is None:
+						outp += _nothing + " "
+					else:
 						outp += _fill(elem) + str(elem) + " "
-
-					fill = self.bucket_size - len(self.table[i])
-					outp += (_nothing + " ") * fill
 
 				outp += "\n"
 
