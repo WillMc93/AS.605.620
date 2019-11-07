@@ -1,0 +1,8 @@
+# Makes sure that the program ignores alphabetical/symbolic input
+# we expect that only the test signal 12345 makes it into the output for this one
+
+12-
+ABC
+$%@!
+blah
+12345

@@ -24,7 +24,7 @@ import fileIO # our fileIO functions
 
 # Useful lists/dicts
 DEFAULTS = {'input': '', 'output': './outputs/default_output.txt', \
-						'hash_func': 'class', 'mod': 120, 'bucket_size': 3, \
+						'hash_func': 'class', 'mod': 120, 'bucket_size': 1, \
 						'collision': 'quadratic', 'c': [0,1]}
 
 INT_PARAMS = ['mod', 'bucket_size']
@@ -50,8 +50,7 @@ def help():
 			"or with prefixes (e.g. --input_path=[path])")
 	print("If using a named parameter all must be named ", \
 			"(except for input and output which are checked for).")
-	print("Defaults: 'class', '120', '3', ", \
-			"'quadratic', [0,1]")
+	print("Defaults: class, 120, 1, quadratic, [0,1]")
 	print("\nOptions: ")
 	print("\thash_func: choose between 'class' or 'student'")
 	print("\tmod: mod value for class hash")

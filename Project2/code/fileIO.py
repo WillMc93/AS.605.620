@@ -21,7 +21,7 @@ def read_input(path):
 		# yield data per line
 		for data in file:
 			# make sure the line is an integer
-			if re.fullmatch(r'^[0-9]+\s*\n$', data):
+			if re.fullmatch(r'^[0-9]+\s*\n{0,1}$', data):
 				# get rid of whitespace (what does superfulous mean?)
 				outp = re.sub(r'\s', '', data)
 				# yeet
@@ -45,7 +45,7 @@ def write_outp(table, path):
 		file.write("-" * 78 + "\n")
 
 		# write statistics
-		file.write("Statistics -- \n")
+		file.write("\nStatistics -- \n")
 		file.write(f"\tCollisions: {table.prim_coll_count} \n")
 
 		if len(table.unplaced) < 1:
