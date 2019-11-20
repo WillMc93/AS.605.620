@@ -17,16 +17,28 @@ Generator function for yielding ints from the input file, path
 """
 def read_input(path):
 
+	sequences = dict()
+	counter = 0
+	
+	seq_pattern = re.compile(r'^(?P<name>[.]+)\s*=\s*(?P<seq>\S+)$')
+	
 	with open(path) as file:
-		# yield data per line
-		for data in file:
-			# make sure the line is an integer
-			if re.fullmatch(r'^[0-9]+\s*\n{0,1}$', data):
-				# get rid of whitespace (what does superfulous mean?)
-				outp = re.sub(r'\s', '', data)
-				# yeet
-				yield int(outp)
-	return
+		for line in file:
+			
+			match = re.fullmatch(seq_pattern, line)
+			
+			# if the sequence is valid and the name is not already in sequences
+			if match and match.group('name') not in sequence.keys():
+				# add it as is
+				sequences[match.group('name')] = match.group('seq')
+
+			# else if the match name is already in sequences
+			elif match and match.group('name') in sequences.keys():
+				# append the counter 
+				sequences[match.group('name') + '_counter'] = match.group('seq')
+				counter += 1
+
+	return sequences
 
 """
 Function for writing the table to the output file, path.
