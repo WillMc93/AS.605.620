@@ -6,7 +6,7 @@ class LCS:
 		assert(len(seq1) > 0 and len(seq2) > 0)
 
 		# initialize the comparison matrix
-		_fill = [(0, '') for _ in range(len(seq2) + 1)] # get the vertical lists
+		_fill = [0 for _ in range(len(seq2) + 1)] # get the vertical lists
 		self.matrix = [_fill for _ in range(len(seq1) + 1)] # arrange vertical lists
 
 		self.seq1 = seq1
@@ -26,13 +26,13 @@ class LCS:
 		for i,j in product(*dims):
 			# if sequences match: 1 + diag value
 			if self.seq1[i] == self.seq2[j]:
-				self.matrix[i][j] = (1 + matrix[i+1][j+1], diag)
+				self.matrix[i][j] = 1 + matrix[i+1][j+1]
 			else:
-				tmp_a = (self.matrix[i+1][j], 'right')
-				tmp_b = (self.matrix[i][j+1], 'down')
+				tmp_a = self.matrix[i+1][j]
+				tmp_b = self.matrix[i][j+1]
 
 				# pick bottom value if >= right-value; else down-value
-				self.matrix[i][j] = tmp_a if tmp_a >= else tmp_b
+				self.matrix[i][j] = tmp_a if tmp_a >= tmp_b else tmp_b
 
 	def build_seq(self):
 		sequence = ''
@@ -49,7 +49,7 @@ class LCS:
 				i += 1
 				j += 1
 
-			elif self.matrix[i+1][j][0] >= self.matrix[i][j+1][0];
+			elif self.matrix[i+1][j] >= self.matrix[i][j+1]:
 				i += 1
 			else:
 				j += 1

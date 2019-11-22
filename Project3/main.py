@@ -1,4 +1,3 @@
-from itertools import product
 import sys
 
 sys.path.append('./code/')
@@ -21,7 +20,13 @@ if __name__ == '__main__':
 	sequences = fileIO.read_inp(input_path)
 
 	# find the LCS
-	for seq1, seq2 in product(*sequences):
-		lcs = LCS(seq1, seq2)
+	for seq1_key in sequences.keys():
+		for seq2_key in sequences.keys():
+			if seq1_key == seq2_key:
+				continue
+			
+			seq1 = sequences[seq1_key]
+			seq2 = sequences[seq2_key]
 
-		fileIO.write_outp(lcs.LCS)
+			lcs = LCS(seq1, seq2)
+			fileIO.write_outp(seq1_key, seq2_key, lcs.LCS, output_path)
