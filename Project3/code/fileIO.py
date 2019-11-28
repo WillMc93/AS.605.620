@@ -33,7 +33,7 @@ def read_inp(path):
 			# else if the match name is already in sequences
 			elif match and match.group('name') in sequences.keys():
 				# append the counter 
-				sequences[match.group('name') + '_counter'] = match.group('seq')
+				sequences[match.group('name') + str(counter)] = match.group('seq')
 				counter += 1
 
 	return sequences
@@ -47,7 +47,7 @@ Calls the table's to_string() and pulls the statistics.
 """
 def write_outp(seq1_name, seq2_name, seq, path):
 
-	with open(path, 'wa') as file:
+	with open(path, 'a') as file:
 		file.write(f"LCS of {seq1_name} and {seq2_name}:")
 		file.write(f"\t{seq}\n")
 

@@ -1,21 +1,33 @@
 from itertools import product
 
 def init_matrix(m,n):
-	fill = [0] * (m+1)
-	return [fill for _ in range(n + 1)]
+	fill = [0] * (n+1)
+	return [fill for _ in range(m+1)]
 
 def calc_lcs(seq1, seq2):
+	# local variable declarations
+	dims = (len(seq1), len(seq2))	
+	matrix = init_matrix(*dims)
+	
 	# get loop dimensions
-	rng1 = range(len(seq1)-1, -1, -1)
-	rng2 = range(len(seq2)-1, -1, -1)
+	rng1 = range(dims[0], -1, -1)
+	rng2 = range(dims[1], -1, -1)
 
-	matrix = init_matrix(len(seq1), len(seq2))
+	import pdb
+	#pdb.set_trace()
 
 	# fill matrix (this is just an abstracted nested loop)
 	for i,j in product(rng1, rng2):
+		
+		# if in one of the last cells
+		if i == dims[0] or j == dims[1]:
+			continue
+
 		# if sequences match: 1 + diag value
 		if seq1[i] == seq2[j]:
 			matrix[i][j] = 1 + matrix[i+1][j+1]
+
+		# else we need to check the right and down values
 		else:
 			right = matrix[i+1][j]
 			down = matrix[i][j+1]
