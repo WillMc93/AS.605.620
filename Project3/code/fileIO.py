@@ -18,7 +18,7 @@ def read_inp(path):
 	sequences = dict()
 	counter = 0
 	
-	seq_pattern = re.compile(r'^(?P<name>\S+)\s*=\s*(?P<seq>\S+)$')
+	seq_pattern = re.compile(r'^(?P<name>\S+)\s*=\s*(?P<seq>\S+)\s*$')
 	
 	with open(path) as file:
 		for line in file:
@@ -45,10 +45,10 @@ Calls the table's to_string() and pulls the statistics.
 @param table: hash_table that needs to be written. 
 @param path: string representationof the file path of the output
 """
-def write_outp(seq1_name, seq2_name, lcs, path):
+def write_outp(seq1_name, seq2_name, seq, path):
 
 	with open(path, 'wa') as file:
 		file.write(f"LCS of {seq1_name} and {seq2_name}:")
-		file.write(f"\t{lcs}")
+		file.write(f"\t{seq}\n")
 
 		

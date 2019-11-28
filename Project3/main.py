@@ -1,9 +1,11 @@
 import sys
+from itertools import product
 
 sys.path.append('./code/')
 
 import LCS
 import fileIO
+
 
 if __name__ == '__main__':
 	# error check input arguments
@@ -16,17 +18,18 @@ if __name__ == '__main__':
 
 	input_path = sys.argv[1]
 	output_path = sys.argv[2]
+	#import pdb
+	#pdb.set_trace()
 
 	sequences = fileIO.read_inp(input_path)
-
 	# find the LCS
-	for seq1_key in sequences.keys():
-		for seq2_key in sequences.keys():
-			if seq1_key == seq2_key:
-				continue
-			
-			seq1 = sequences[seq1_key]
-			seq2 = sequences[seq2_key]
+	for seqA, seqB in product(sequences, sequences):
+		if seqA == seqB:
+			continue
+		
+		# get the actual sequence
+		seq1 = sequences[seqA]
+		seq2 = sequences[seqB]
 
-			lcs = LCS(seq1, seq2)
-			fileIO.write_outp(seq1_key, seq2_key, lcs.LCS, output_path)
+		lcs = LCS.calc_lcs(seq1, seq2)
+		fileIO.write_outp(seq1, seq2, lcs, output_path)
