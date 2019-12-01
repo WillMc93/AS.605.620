@@ -1,29 +1,33 @@
 """
-Functions to deal with file input and output
+Functions to manage file input and output
 
 @authour William McElhenney
-@date 11/6/2019
+@date 12/1/2019
 """
 
 # Imports
 import re # regular expressions
 
 """
-Generator function for yielding ints from the input file, path
+Generator function for yielding the labels and sequences from the input file.
 
-@param path: string representation of the file path of the input
+@param path: string representation of the input file path
 """
 def gen_sequences(path):
 
+	# allows us to read data with all the same labels
 	index = dict()
 
+	# yieldables
 	label = None
 	sequence = None
 	
+	# regex patterns
 	seq_pattern = re.compile(r'^(?P<name>\S+)\s*=\s*(?P<seq>\S+)\s*$')
 	comment_pattern = re.compile(r'^#.*\s*$')
 	
 	with open(path) as file:
+		# parse each line
 		for line in file:
 
 			# ignore commented lines
@@ -68,6 +72,7 @@ Calls the table's to_string() and pulls the statistics.
 def write_outp(seq1_name, seq2_name, lcs_seq, path):
 
 	with open(path, 'a') as file:
+		# report the compared sequences and their LCS and LCS length
 		file.write(f"LCS of {seq1_name} and {seq2_name}:\n")
 		file.write(f"\t{lcs_seq}: Length {len(lcs_seq)}\n")
 

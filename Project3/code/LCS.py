@@ -1,9 +1,33 @@
+"""
+Functions to calculate and return the LCS of two given sequences.
+
+@authour Will McElhenney
+@date 12/1/2019
+"""
+
 from itertools import product
 
+"""
+Function to make an empty matrix for lcs calculation.
+
+@param m: length of sequence 1, rows
+@param n: length of sequence 2, cols
+
+@ return an initialized m+1 by n+1 2d list
+"""
 def init_matrix(m,n):
 	fill = [0] * (n+1)
 	return [fill for _ in range(m+1)]
 
+"""
+Function for bottom-up dynamic calculation of the LCS sequence length. 
+Generates a matrix where the (0,0) position is the length of the LCS.
+
+@param seq1: the first sequence
+@param seq2: the second sequence
+
+@return a filled in 2d LCS matrix
+"""
 def calc_lcs(seq1, seq2):
 	# local variable declarations
 	dims = (len(seq1), len(seq2))	
@@ -37,6 +61,15 @@ def calc_lcs(seq1, seq2):
 
 	return matrix
 
+"""
+Function for identifying the exact LCS sequence from the LCS-matrix.
+
+@param seq1: the sequence for the rows of the LCS matrix
+@param seq2: the sequence for the cols of the LCS matrix
+@param matrix: the LCS matrix
+
+@return the LCS sequence
+"""
 def build_seq(seq1, seq2, matrix):
 	sequence = ''
 

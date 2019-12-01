@@ -1,12 +1,29 @@
+"""
+Project 3 - Longest-Common Subsequence
+
+Here's the main script for the program which accepts the input arguments and
+ensures everything completes.
+
+@authour Will McElhenney
+@date 12/1/2019
+"""
+
+# library imports
 import sys
 from itertools import product
 
+# append code to the pypath
 sys.path.append('./code/')
 
+# import our custom code
 import LCS
 import fileIO
 
+"""
+MAIN
 
+Checks the input arguments and runs the program. 
+"""
 if __name__ == '__main__':
 	# error check input arguments
 	if len(sys.argv) < 3:
@@ -19,18 +36,36 @@ if __name__ == '__main__':
 	in_path = sys.argv[1]
 	out_path = sys.argv[2]
 
-	# initialize output file
-	fileIO.init_outp(in_path, out_path)
+	# check that input file exists
+	try:
+		temp = open(in_path, 'r')
+	except IOError:
+		print(f"Input path {in_path} could not be found.")
+		quit()
 
-	# find the LCS
+	# initialize the output file
+	try:
+		fileIO.init_outp(in_path, out_path)
+	except IOError:
+		print(f"Output path {out_path} could not be reached. Please make sure "
+				"that the directory exists.")
+		quit()
+
+	# file iterators for loop
 	gen1 = fileIO.gen_sequences(in_path)
 	gen2 = fileIO.gen_sequences(in_path)
 
+	# loop through sequence combinations
 	for (lbl1, seq1), (lbl2, seq2) in product(gen1, gen2):
 		# ignore same sequence
 		if lbl1 == lbl2:
 			continue
 		
+		# build the LCS matrix
 		lcs = LCS.calc_lcs(seq1, seq2)
+
+		# rebuild the LCS
 		lcs_seq = LCS.build_seq(seq1, seq2, lcs)
+
+		# write LCS to output
 		fileIO.write_outp(lbl1, lbl2, lcs_seq, out_path)
