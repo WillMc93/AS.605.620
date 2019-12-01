@@ -10,26 +10,27 @@ import fileIO
 if __name__ == '__main__':
 	# error check input arguments
 	if len(sys.argv) < 3:
-		print("Too few arguments; need an input path and an output path")
+		print("Too few arguments; need an input path and an output path.")
 		quit()
 	elif len(sys.argv) > 3:
-		print("Too many arguments; just need an input path and an output path")
+		print("Too many arguments; only need an input path and an output path.")
 		quit()
 
-	input_path = sys.argv[1]
-	output_path = sys.argv[2]
-	#import pdb
-	#pdb.set_trace()
+	in_path = sys.argv[1]
+	out_path = sys.argv[2]
 
-	sequences = fileIO.read_inp(input_path)
+	# initialize output file
+	fileIO.init_outp(in_path, out_path)
+
 	# find the LCS
-	for seqA, seqB in product(sequences, sequences):
-		if seqA == seqB:
+	gen1 = fileIO.gen_sequences(in_path)
+	gen2 = fileIO.gen_sequences(in_path)
+
+	for (lbl1, seq1), (lbl2, seq2) in product(gen1, gen2):
+		# ignore same sequence
+		if lbl1 == lbl2:
 			continue
 		
-		# get the actual sequence
-		seq1 = sequences[seqA]
-		seq2 = sequences[seqB]
-
 		lcs = LCS.calc_lcs(seq1, seq2)
-		fileIO.write_outp(seq1, seq2, lcs, output_path)
+		lcs_seq = LCS.build_seq(seq1, seq2, lcs)
+		fileIO.write_outp(lbl1, lbl2, lcs_seq, out_path)

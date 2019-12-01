@@ -37,7 +37,7 @@ def calc_lcs(seq1, seq2):
 
 	return matrix
 
-def build_seq(matrix):
+def build_seq(seq1, seq2, matrix):
 	sequence = ''
 
 	# let m be length of sequence 1
@@ -54,6 +54,7 @@ def build_seq(matrix):
 
 		elif matrix[i+1][j] >= matrix[i][j+1]:
 			i += 1
+
 		else:
 			j += 1
 
