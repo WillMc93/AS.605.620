@@ -1,8 +1,8 @@
 Read in the sequences labeled: 
-	S1
-	S2
+	X
+	Y
 ==============================================================================
-LCS of S1 and S2:
-	abcf: Length 4
-LCS of S2 and S1:
-	abcf: Length 4
+LCS of X and Y:
+	BCBA: Length 4
+LCS of Y and X:
+	BDAB: Length 4

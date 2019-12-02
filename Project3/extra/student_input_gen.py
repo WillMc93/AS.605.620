@@ -1,6 +1,6 @@
 import random
 
-def generate(path='student_input.txt', samples=32, n=256):
+def generate(path='student_input.txt', samples=4, n=64):
 
 	nucleotides = ['A', 'T', 'G', 'C']
 
