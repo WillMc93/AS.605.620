@@ -15,12 +15,12 @@ Function to make an empty matrix for lcs calculation.
 
 @ return an initialized m+1 by n+1 2d list
 """
-def init_matrix(m,n):
-	fill = [0] * (n+1)
-	return [fill for _ in range(m+1)]
+def init_matrix(m,n, fill=0):
+	fill = [0] * (n)
+	return [fill for _ in range(m)]
 
 """
-Function for bottom-up dynamic calculation of the LCS sequence length. 
+Function for dynamic calculation of the LCS sequence length. 
 Generates a matrix where the (0,0) position is the length of the LCS.
 
 @param seq1: the first sequence
@@ -30,65 +30,69 @@ Generates a matrix where the (0,0) position is the length of the LCS.
 """
 def calc_lcs(seq1, seq2):
 	# local variable declarations
-	dims = (len(seq1), len(seq2))	
-	matrix = init_matrix(*dims)
-	
-	# get loop dimensions
-	rng1 = range(dims[0], -1, -1)
-	rng2 = range(dims[1], -1, -1)
-
-	import pdb
-	#pdb.set_trace()
+	dims = (len(seq1), len(seq2))
+	c_matrix = init_matrix(dims[0]+1, dims[1]+1) # c
+	b_matrix = init_matrix(*dims, fill='') # b
+		
+	# define loop dimensions
+	rng1 = range(dims[0]+1)
+	rng2 = range(dims[1]+1)
 
 	# fill matrix (this is just an abstracted nested loop)
 	for i,j in product(rng1, rng2):
-		
-		# if in one of the last cells
-		if i == dims[0] or j == dims[1]:
+
+		# c and b values we fill into respective matrices
+		c = None
+		b = None
+
+		# skip first row/column
+		if i == 0 or j == 0:
 			continue
+		
+		# if the values match at i,j
+		if seq1[i-1] == seq2[j-1]
+			c = 1 + c_matrix[i-1][j-1]
+			b = 'diag'
 
-		# if sequences match: 1 + diag value
-		if seq1[i] == seq2[j]:
-			matrix[i][j] = 1 + matrix[i+1][j+1]
-
-		# else we need to check the right and down values
+		# else we need to check the up and left values
 		else:
-			right = matrix[i+1][j]
-			down = matrix[i][j+1]
+			up = c_matrix[i-1][j]
+			left = c_matrix[i][j-1]
+			
+			# pick the maximum of the adjacent values
+			c, b = up, 'up' if up >= left  else left, 'left'
 
-			# pick bottom value if >= right-value; else down-value
-			matrix[i][j] = right if right >= down else down
+		# debug check
+		assert(c is not None and b is not None)
 
-	return matrix
+		c_matrix[i][j] = c
+		b_matrix[i][j] = b
+
+	return c_matrix, b_matrix
 
 """
 Function for identifying the exact LCS sequence from the LCS-matrix.
 
 @param seq1: the sequence for the rows of the LCS matrix
 @param seq2: the sequence for the cols of the LCS matrix
-@param matrix: the LCS matrix
+@param b_matrix: the directional matrix (b)
 
 @return the LCS sequence
 """
-def build_seq(seq1, seq2, matrix):
-	sequence = ''
+def build_seq(b_matrix, seq1, seq2, i=None, j=None):
 
-	# let m be length of sequence 1
-	# and n be length of sequence 2
-	m = len(seq1)
-	n = len(seq2)
+	if i is None or j is None:
+		i = len(seq1)
+		j = len(seq2l)
 
-	i,j = 0,0
-	while(i < m and j < n):
-		if seq1[i] == seq2[j]:
-			sequence += seq1[i]
-			i += 1
-			j += 1
+	if i == 0 or j == 0:
+		return ''
 
-		elif matrix[i+1][j] >= matrix[i][j+1]:
-			i += 1
+	if b_matrix[i][j] == 'diag':
+		return build_seq(b_matrix, seq1, seq2, i-1, j-1) + seq1[i]
 
-		else:
-			j += 1
+	elif b_matrix[i][j] == 'up':
+		return build_seq(b_matrix, seq1, seq2, i-1, j)
 
-	return sequence
+	else:
+		return build_seq(i-1, j, seq1, seq2, matrix)

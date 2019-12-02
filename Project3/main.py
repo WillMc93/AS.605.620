@@ -65,7 +65,9 @@ if __name__ == '__main__':
 		lcs = LCS.calc_lcs(seq1, seq2)
 
 		# rebuild the LCS
-		lcs_seq = LCS.build_seq(seq1, seq2, lcs)
+		m = len(seq1) - 1
+		n = len(seq2) - 1
+		lcs_seq = LCS.build_seq(m, n, seq1, seq2, lcs)
 
 		# write LCS to output
 		fileIO.write_outp(lbl1, lbl2, lcs_seq, out_path)
