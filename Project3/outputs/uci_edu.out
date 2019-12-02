@@ -1,0 +1,8 @@
+Read in the sequences labeled: 
+	L1
+	L2
+==============================================================================
+LCS of L1 and L2:
+	emt_ole: Length 7
+LCS of L2 and L1:
+	emt_ole: Length 7
