@@ -5,26 +5,26 @@ Read in the sequences labeled:
 	S4
 ==============================================================================
 LCS of S1 and S2:
-	GTCGT: Length 5
+	GTCGTCGGAAGCCGGCCGAA: Length 20
 LCS of S1 and S3:
-	ATTGCA: Length 6
+	ACCGGCGATGCGGAACCCG: Length 19
 LCS of S1 and S4:
-	CTTGC: Length 5
+	CTGCTAAGGCA: Length 11
 LCS of S2 and S1:
-	ACCGGTCGA: Length 9
+	GTCGTCGGAAGCCGGCCGAA: Length 20
 LCS of S2 and S3:
-	ATTGCA: Length 6
+	GCTTCGGGCCGTGCTTGTAA: Length 20
 LCS of S2 and S4:
-	CTTGCTTAAA: Length 10
+	GCTTAATGTGCA: Length 12
 LCS of S3 and S1:
-	ACCGGTCGACTG: Length 12
+	ATGCTGCGCGGAGCGGCCG: Length 19
 LCS of S3 and S2:
-	GTCGTTCG: Length 8
+	TGTTGATGCCGTGCTTGTAA: Length 20
 LCS of S3 and S4:
-	CTTGCTTAAATG: Length 12
+	TTGCTTATGTGCA: Length 13
 LCS of S4 and S1:
-	AC: Length 2
+	CTTGCAAGGCA: Length 11
 LCS of S4 and S2:
-	GTC: Length 3
+	CTTGAATGTGCA: Length 12
 LCS of S4 and S3:
-	ATTGCA: Length 6
+	CTTGCTTAAATTG: Length 13

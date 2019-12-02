@@ -1,0 +1,8 @@
+Read in the sequences labeled: 
+	S1
+	S2
+==============================================================================
+LCS of S1 and S2:
+	abcf: Length 4
+LCS of S2 and S1:
+	abcf: Length 4

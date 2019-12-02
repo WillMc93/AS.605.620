@@ -1,0 +1,8 @@
+Read in the sequences labeled: 
+	X
+	Y
+==============================================================================
+LCS of X and Y:
+	BCBA: Length 4
+LCS of Y and X:
+	BDAB: Length 4
