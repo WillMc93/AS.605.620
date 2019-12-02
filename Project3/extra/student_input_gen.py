@@ -1,20 +1,20 @@
 import random
 
-def generate(path='student_input.txt', n=70):
+def generate(path='student_input.txt', samples=32, n=256):
+
+	nucleotides = ['A', 'T', 'G', 'C']
 
 	with open(path, 'w') as file:
-		choices = random.choices(range(0, 99999), k=n)
+		
+		for i in range(samples):
+			choices = random.choices(range(0, 4), k=n)
+			file.write("String=")
 
+			for choice in choices:
+				file.write(str(nucleotides[choice]))
 
-		count = 0
-		for choice in choices:
-			file.write(str(choice) + "\n")
+			file.write("\n")
 
-			count += 1
-
-			if count > 4:
-				file.write("\n")
-				count = 0
 
 if __name__ == '__main__':
 	generate()
