@@ -62,12 +62,12 @@ if __name__ == '__main__':
 			continue
 		
 		# build the LCS matrix
-		lcs = LCS.calc_lcs(seq1, seq2)
+		c_matrix, b_matrix = LCS.calc_lcs(seq1, seq2)
 
 		# rebuild the LCS
 		m = len(seq1) - 1
 		n = len(seq2) - 1
-		lcs_seq = LCS.build_seq(m, n, seq1, seq2, lcs)
+		lcs_seq = LCS.build_seq(b_matrix, seq1, seq2)
 
 		# write LCS to output
 		fileIO.write_outp(lbl1, lbl2, lcs_seq, out_path)

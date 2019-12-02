@@ -5,26 +5,26 @@ Read in the sequences labeled:
 	S4
 ==============================================================================
 LCS of S1 and S2:
-	CTGTAAA: Length 7
-LCS of S1 and S3:
-	TCCTCG: Length 6
-LCS of S1 and S4:
-	TGTGCA: Length 6
-LCS of S2 and S1:
-	CGCGGAAGCCGGCCGAA: Length 17
-LCS of S2 and S3:
-	TTCCTCG: Length 7
-LCS of S2 and S4:
-	AATGTGCA: Length 8
-LCS of S3 and S1:
-	GCCGGCCGAA: Length 10
-LCS of S3 and S2:
-	TTGCTCTGTAAA: Length 12
-LCS of S3 and S4:
-	AATGTGCA: Length 8
-LCS of S4 and S1:
 	GAA: Length 3
+LCS of S1 and S3:
+	: Length 0
+LCS of S1 and S4:
+	A: Length 1
+LCS of S2 and S1:
+	AA: Length 2
+LCS of S2 and S3:
+	: Length 0
+LCS of S2 and S4:
+	A: Length 1
+LCS of S3 and S1:
+	: Length 0
+LCS of S3 and S2:
+	: Length 0
+LCS of S3 and S4:
+	: Length 0
+LCS of S4 and S1:
+	CA: Length 2
 LCS of S4 and S2:
-	TGTAAA: Length 6
+	GCA: Length 3
 LCS of S4 and S3:
-	TCG: Length 3
+	: Length 0
