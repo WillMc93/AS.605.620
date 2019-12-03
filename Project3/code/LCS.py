@@ -5,8 +5,6 @@ Functions to calculate and return the LCS of two given sequences.
 @date 12/1/2019
 """
 
-from itertools import product
-
 """
 Function to make an empty matrix for lcs calculation.
 
@@ -42,9 +40,6 @@ def calc_lcs(seq1, seq2):
 	b = None
 	c = None
 
-	import pdb
-	#pdb.set_trace()
-
 	for i in rng1:
 		for j in rng2:
 			if seq1[i] == seq2[j]:
@@ -69,6 +64,10 @@ Function for identifying the exact LCS sequence from the LCS-matrix.
 @param b_matrix: the directional matrix (b)
 @param seq1: the sequence for the rows of the LCS matrix
 @param seq2: the sequence for the cols of the LCS matrix
+@param i: row value of LCS matrix
+@param j: col value of LCS matrix
+
+@throw IOError: happens if the b_matrix is not all the way filled out (shouldn't happen)
 
 @return the LCS sequence
 """
@@ -76,22 +75,30 @@ def build_seq(b_matrix, seq1, seq2, i=None, j=None):
 
 	lcs_seq = ''
 
+	# initalize to bottom-right most indexes if None provided
 	if i == None or j == None:
 		i = len(seq1) - 1
 		j = len(seq2) - 1
 
+	# traverse through the b-matrix building the sequences
 	while (i >= 0 and j >= 0):
+		# if the sequences matched at i,j
 		if b_matrix[i][j] == 'diag':
+			assert(seq1[i] == seq2[j])
 			lcs_seq = seq1[i] + lcs_seq 
 			i -= 1
 			j -= 1
+
+		# if the sequences did not match follow direction
 		elif b_matrix[i][j] == 'up':
 			i -= 1
 		elif b_matrix[i][j] == 'left':
 			j -= 1
 
+		# if something horrible has happened
 		else:
 			# uh oh
+			# I haven't seen this happen and suspect it is superfulous
 			raise IOError
 
 	return lcs_seq
