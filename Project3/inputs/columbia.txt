@@ -1,0 +1,5 @@
+# Taken from http://www.columbia.edu/~cs2035/courses/csor4231.S19/lcs.pdf
+# The answer they provide is wrong. I verfied a number of mine here: http://lcs-demo.sourceforge.net/
+
+S1 = AAACCGTGAGTTATTCGTTCTAGAA
+S2 = CACCCCTAAGGTACCTTTGGTTC

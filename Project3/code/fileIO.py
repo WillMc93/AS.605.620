@@ -15,7 +15,7 @@ Generator function for yielding the labels and sequences from the input file.
 """
 def gen_sequences(path):
 
-	# allows us to read data with all the same labels
+	# allows us to read data with the same labels
 	index = dict()
 
 	# yieldables

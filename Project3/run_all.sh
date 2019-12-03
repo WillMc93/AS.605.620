@@ -9,4 +9,4 @@ python main.py ./inputs/student_input.txt ./outputs/student_output.out
 python main.py ./inputs/tushar.txt ./outputs/tushar_output.out
 python main.py ./inputs/book.txt ./outputs/book.out
 python main.py ./inputs/uci_edu.txt ./outputs/uci_edu.out
-
+python main.py ./inputs/columbia.txt ./outputs/columbia.out
