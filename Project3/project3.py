@@ -72,3 +72,8 @@ if __name__ == '__main__':
 
 		# write LCS to output
 		fileIO.write_outp(lbl1, lbl2, lcs_seq, out_path)
+	
+	# keeps output cleaner
+	print("\n")
+
+
