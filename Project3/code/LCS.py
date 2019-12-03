@@ -60,7 +60,6 @@ def calc_lcs(seq1, seq2):
 			b_matrix[i][j] = b
 			c_matrix[i+1][j+1] = c
 
-	print(c_matrix, b_matrix)
 	return b_matrix, c_matrix
 
 

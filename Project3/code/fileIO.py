@@ -23,17 +23,29 @@ def gen_sequences(path):
 	sequence = None
 	
 	# regex patterns
-	seq_pattern = re.compile(r'^(?P<name>\S+)\s*=\s*(?P<seq>\S+)\s*$')
+	seq_pattern = re.compile(r'^(?P<name>\S+)\s*=\s*(?P<seq>.+)\s*$')
 	comment_pattern = re.compile(r'^#.*\s*$')
-	
+
 	with open(path) as file:
 		# parse each line
 		for line in file:
-
 			# ignore commented lines
 			if re.fullmatch(comment_pattern, line):
 				continue
 			
+			# ignore unclear sequnces (those that have two or more equal signs)
+			# I couldn't make a regex that worked with this for some reason
+			equality_count = 0
+			for char in line:
+				if char == '=':
+					equality_count += 1
+					if equality_count > 1:
+						break
+
+			if equality_count > 1:
+				continue
+
+			# Parse for valid sequences
 			match = re.fullmatch(seq_pattern, line)
 			
 			# if the sequence is valid

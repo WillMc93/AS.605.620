@@ -1,0 +1,10 @@
+# This file shows that commented lines and unclear lines do not get used
+# It also shows that our program works with more than nucleotide sequences
+
+# ThisLineDoesn'tShow = The quick brown fox
+ThisLineIsUnclear == The lazy dog
+AlsoUnclear = jumps = over
+
+# The next two lines do show and get reported in the output
+half1 = The quick brown fox 
+half2 = jumps over the lazy dog

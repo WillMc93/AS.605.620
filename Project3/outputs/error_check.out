@@ -1,8 +1,8 @@
 Read in the sequences labeled: 
-	L1
-	L2
+	half1
+	half2
 ==============================================================================
-LCS of L1 and L2:
-	emt ole: Length 7
-LCS of L2 and L1:
-	emt ole: Length 7
+LCS of half1 and half2:
+	he  o: Length 5
+LCS of half2 and half1:
+	u o  : Length 5
