@@ -11,7 +11,7 @@ Function to make an empty matrix for lcs calculation.
 @param m: length of sequence 1, rows
 @param n: length of sequence 2, cols
 
-@ return an initialized m+1 by n+1 2d list
+@ return an initialized m-by-n 2d list
 """
 def init_matrix(m,n, fill_val=0):
 	return [[fill_val] * n for _ in range(m)]
@@ -82,22 +82,22 @@ def build_seq(b_matrix, seq1, seq2, i=None, j=None):
 
 	# traverse through the b-matrix building the sequences
 	while (i >= 0 and j >= 0):
-		# if the sequences matched at i,j
+		# if the sequences matched at (i,j), append the output sequence and
+		# follow direction
 		if b_matrix[i][j] == 'diag':
-			assert(seq1[i] == seq2[j])
+			assert(seq1[i] == seq2[j]) # dummy check
 			lcs_seq = seq1[i] + lcs_seq 
 			i -= 1
 			j -= 1
 
-		# if the sequences did not match follow direction
+		# if the sequences did not match, just follow direction
 		elif b_matrix[i][j] == 'up':
 			i -= 1
 		elif b_matrix[i][j] == 'left':
 			j -= 1
 
-		# if something horrible has happened
+		# if something horrible has happened, uh oh
 		else:
-			# uh oh
 			# I haven't seen this happen and suspect it is superfulous
 			raise IOError
 
