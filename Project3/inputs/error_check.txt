@@ -5,6 +5,11 @@
 ThisLineIsUnclear == The lazy dog
 AlsoUnclear = jumps = over
 
+# What happens with just an equals sign?
+ = 
+ = ATA
+ATA = 
+
 # The next two lines do show and get reported in the output
 half1 = The quick brown fox 
 half2 = jumps over the lazy dog

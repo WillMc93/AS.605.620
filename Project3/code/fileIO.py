@@ -54,6 +54,13 @@ def gen_sequences(path):
 				label = match.group('name')
 				sequence = match.group('seq')
 
+				# check that a sequence did get read
+				# makes sure that there's no 'empty' data of the form 'label = '
+				if len(sequence) < 2:
+					continue
+
+
+
 				# change the label as necessary
 				if label in index:
 					index[label] += 1
