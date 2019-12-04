@@ -70,7 +70,8 @@ def gen_sequences(path):
 				
 			# prevent yielding None, None
 			else:
-				print(f"Failed to parse line: {line}")
+				if not re.fullmatch(r'\s*', line):
+					print(f"WARNING: Failed to parse line: {line}")
 				continue
 
 			# yield the label, seq tuple
