@@ -33,8 +33,8 @@ def gen_sequences(path):
 			if re.fullmatch(comment_pattern, line):
 				continue
 			
-			# ignore unclear sequnces (those that have two or more equal signs)
-			# I couldn't make a regex that worked with this for some reason
+			# ignore unclear sequences (those that have two or more equal signs)
+			# I couldn't make a regex that worked for this for some reason
 			equality_count = 0
 			for char in line:
 				if char == '=':
@@ -54,14 +54,12 @@ def gen_sequences(path):
 				label = match.group('name')
 				sequence = match.group('seq')
 
-				# check that a sequence did get read
+				# check that a full sequence did get read
 				# makes sure that there's no 'empty' data of the form 'label = '
 				if len(sequence) < 2:
 					continue
 
-
-
-				# change the label as necessary
+				# update the label as necessary
 				if label in index:
 					index[label] += 1
 					label = f"{label}_{index[label]}"
@@ -72,6 +70,7 @@ def gen_sequences(path):
 				
 			# prevent yielding None, None
 			else:
+				print(f"Failed to parse line: {line}")
 				continue
 
 			# yield the label, seq tuple

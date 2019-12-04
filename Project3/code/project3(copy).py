@@ -60,12 +60,20 @@ if __name__ == '__main__':
 		# ignore same sequence
 		if lbl1 == lbl2:
 			continue
-		
+
 		# build the LCS matrix
 		b_matrix, c_matrix = LCS.calc_lcs(seq1, seq2)
 
 		# rebuild the LCS
 		lcs_seq = LCS.build_seq(b_matrix, seq1, seq2)
 
+		# command-line report
+		print(f"LCS of {lbl1} and {lbl2} is {lcs_seq}.")
+
 		# write LCS to output
 		fileIO.write_outp(lbl1, lbl2, lcs_seq, out_path)
+	
+	# keeps output cleaner
+	print("\n")
+
+

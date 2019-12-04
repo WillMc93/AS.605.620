@@ -90,7 +90,7 @@ def build_seq(b_matrix, seq1, seq2, i=None, j=None):
 			i -= 1
 			j -= 1
 
-		# if the sequences did not match, just follow direction
+		# if the sequences did not match, just follow the direction
 		elif b_matrix[i][j] == 'up':
 			i -= 1
 		elif b_matrix[i][j] == 'left':
@@ -98,7 +98,7 @@ def build_seq(b_matrix, seq1, seq2, i=None, j=None):
 
 		# if something horrible has happened, uh oh
 		else:
-			# I haven't seen this happen and suspect it is superfulous
+			# I haven't seen this happen and strongly suspect it is superfulous
 			raise IOError
 
 	return lcs_seq
