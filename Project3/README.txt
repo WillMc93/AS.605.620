@@ -40,6 +40,5 @@ empty.txt - Checks that code successfully runs with no input data.
 -----------------------------------------------------------------------------
 
 The outputs for the inputs are in ./outputs. All inputs (including an empty file) will output something.
-Names here just mirror the input name with .out instead of .txt
 
 	
